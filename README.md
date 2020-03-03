@@ -1,4 +1,4 @@
-# Foxpot Backend Driver by Go
+# Foxpot Backend by Go
 
 ## TODO
 
