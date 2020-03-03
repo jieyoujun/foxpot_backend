@@ -6,6 +6,7 @@ require (
 	github.com/gin-contrib/sessions v0.0.3
 	github.com/gin-gonic/gin v1.5.0
 	github.com/go-yaml/yaml v2.1.0+incompatible // indirect
+	github.com/gorilla/sessions v1.1.3
 	github.com/jinzhu/gorm v1.9.12
 	github.com/microcosm-cc/bluemonday v1.0.2 // indirect
 	github.com/russross/blackfriday v2.0.0+incompatible // indirect

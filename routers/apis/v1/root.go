@@ -27,6 +27,17 @@ func GetIndex(c *gin.Context) {
 
 // GetLogin ...
 func GetLogin(c *gin.Context) {
+	session := sessions.Default(c)
+	if userID, ok := session.Get(utils.SessionKey).(uint); ok {
+		if user, err := models.SelectUserByID(userID); err == nil {
+			if !user.IsAdmin() {
+				c.Redirect(http.StatusFound, "/user")
+				return
+			}
+			c.Redirect(http.StatusFound, "/admin")
+			return
+		}
+	}
 	c.HTML(http.StatusOK, "login.html", nil)
 }
 

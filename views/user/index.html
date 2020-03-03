@@ -7,7 +7,10 @@
 </head>
 <body>
     <h1>Welcome to index page!</h1>
-    <h2>I am a user user.</h2>
+    {{ with .User }}
+    <h2>I am {{ .Username }}, and my password is {{ .HashedPassword }}</h2>
+    {{ end }}
+    <a href="/logout">退出登录</a>
 </body>
 </html>
 {{ end }}

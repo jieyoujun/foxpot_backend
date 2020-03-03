@@ -17,3 +17,5 @@ func NewCookieSessions() cookie.Store {
 	// })
 	return store
 }
+
+// NewRedisSessions ...
