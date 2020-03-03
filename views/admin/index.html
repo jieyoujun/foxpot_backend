@@ -1,0 +1,56 @@
+{{ define "admin/index.html"}}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Foxpot</title>
+        <style>
+            header {
+                height: 80px;
+                background-color:skyblue;
+                vertical-align: middle;
+            }
+            #logo {
+                float:right;
+                margin-right: 80px;
+                border-radius: 80px;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <img width="100" src="/statics/images/logo.png">
+           
+            <img id="logo" width="80" height="80" src="/statics/images/avatar.jpg">
+            <div style="width: 80px;position: absolute; right: 8px; top: 30px; text-align: center;">
+                <span>liki</span><br />
+                <a href="/logout">退出登录</a>
+            </div>
+            
+            
+        </header>
+        <a href="#">首页</a><span>/</span>蜜罐管理
+        <div>
+            <div style="width: 10%;height:430px;background-color: lightcoral;display:inline-block;">
+                <ul>
+                    <li><a href="/kibana" target="_blank">Kibana</a></li>
+                    <li><a href="/eshead" target="_blank">eshead</a></li>
+                    <li><a href="/portainer" target="_blank">蜜罐管理</a></li>
+                    <li><a href="/attackmap" target="_blank">攻击地图</a></li>
+                    <li><a href="/setting" target="_blank">设置</a></li>
+                    <li><a href="#" target="_blank">...</a></li>
+                </ul>
+            </div>
+            <div style="width: 89.5%;height:430px;background-color: lightgreen;display:inline-block;">
+                <ul>
+                    <li><a href="http://localhost:64296" target="_blank">这边嵌个frame</a></li>
+                    <li><a href="http://localhost:64296" target="_blank">这边嵌个frame</a></li>
+                    <li><a href="http://localhost:64296" target="_blank">这边嵌个frame</a></li>
+                    <li><a href="http://localhost:64296" target="_blank">这边嵌个frame</a></li>
+                    <li><a href="http://localhost:64296" target="_blank">这边嵌个frame</a></li>
+                    <li><a href="http://localhost:64296" target="_blank">这边嵌个frame</a></li>
+                </ul>
+            </div>
+        </div>
+    </body>
+</html>
+{{ end }}

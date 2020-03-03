@@ -1,0 +1,25 @@
+{{ define "login.html" }}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+    {{ if .message }}
+    <p>{{ .message }}</p>
+    {{end}}
+    <form action="/login" method="POST", novalidate autocomplete="off">
+        <div>
+            <input type="text" name="username", id="username", placeholder="Username">
+        </div>
+        <div>
+            <input type="password" name="password", id="password", placeholder="Password">
+        </div>
+        <input type="submit" value="登录">
+    </form>
+    <div>
+        <a href="#">忘记密码</a>
+    </div>
+</body>
+</html>
+{{ end }}
