@@ -2,7 +2,7 @@ package utils
 
 import "golang.org/x/crypto/bcrypt"
 
-// HashPassword 生成密码hash串
+// HashPassword 密码哈希串
 func HashPassword(password string) (string, error) {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	return string(hashedPassword), err

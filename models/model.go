@@ -15,14 +15,19 @@ var (
 
 // InitDB 初始化数据库
 func InitDB() (err error) {
-	DB, err = gorm.Open(utils.GlobalConfig.DB.Type, utils.GlobalConfig.DB.DSN)
+
+	DB, err = gorm.Open(utils.Config.DB.Type, utils.Config.DB.DSN)
 	if err != nil {
 		return err
 	}
+
+	// >>>>>>>>>
 	// 配置连接池
-	DB.DB().SetMaxOpenConns(utils.GlobalConfig.DB.MaxOpenConn)
-	DB.DB().SetMaxIdleConns(utils.GlobalConfig.DB.MaxIdleConn)
-	DB.DB().SetConnMaxLifetime(time.Duration(utils.GlobalConfig.DB.MaxLifeTime) * time.Second)
+	// <<<<<<<<<
+	DB.DB().SetMaxOpenConns(utils.Config.DB.MaxOpenConn)
+	DB.DB().SetMaxIdleConns(utils.Config.DB.MaxIdleConn)
+	DB.DB().SetConnMaxLifetime(time.Duration(utils.Config.DB.MaxLifeTime) * time.Second)
+
 	if !DB.HasTable(&User{}) {
 		DB.AutoMigrate(&User{})
 	}

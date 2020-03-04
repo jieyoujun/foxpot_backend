@@ -2,31 +2,20 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Foxpot</title>
-        <style>
-            header {
-                height: 80px;
-                background-color:skyblue;
-                vertical-align: middle;
-            }
-            #logo {
-                float:right;
-                margin-right: 80px;
-                border-radius: 80px;
-            }
-        </style>
+        <title>{{ .title }} - 猎狐蜜罐</title>
+        <link rel="stylesheet" href="statics/css/index.css">
+        <script src="/statics/js/index.js"></script>
     </head>
     <body>
-        <header>
+        <header style="height: 80px; background-color:skyblue; vertical-align: middle;">
             <img width="100" src="/statics/images/logo.png">
-           
-            <img id="logo" width="80" height="80" src="/statics/images/avatar.jpg">
+            <img id="logo" width="80" height="80" src="/statics/images/avatar.jpg" style="float:right; margin-right: 80px; border-radius: 80px;">
             <div style="width: 80px;position: absolute; right: 8px; top: 30px; text-align: center;">
-                <span>liki</span><br />
+                {{ with .User }}
+                <span>{{ .Username }}</span><br />
+                {{ end }}
                 <a href="/logout">退出登录</a>
             </div>
-            
-            
         </header>
         <a href="#">首页</a><span>/</span>蜜罐管理
         <div>

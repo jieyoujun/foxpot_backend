@@ -4,16 +4,21 @@ import (
 	"gopkg.in/ini.v1"
 )
 
-// Config 配置项结构体
-type Config struct {
+// TODO
+// 得有个检查空配置项给个默认值的东西
+// 防止有非法的配置进来瞎搞
+
+// Configuration 系统配置项
+type Configuration struct {
 	Foxpot  foxpotConfig  `ini:"foxpot"`
 	DB      dbConfig      `ini:"db"`
 	Session sessionConfig `ini:"session"`
 }
 
 type foxpotConfig struct {
-	Address string `ini:"addr"`
-	LogPath string `ini:"log_path"`
+	Address  string `ini:"addr"`
+	LogPath  string `ini:"log_path"`
+	LogLevel string `ini:"log_level"`
 }
 
 type dbConfig struct {
@@ -29,10 +34,10 @@ type sessionConfig struct {
 	Secret string `ini:"secret"`
 }
 
-// GlobalConfig 全局配置
-var GlobalConfig Config
+// Config 系统配置
+var Config Configuration
 
-// LoadConfigFile 从配置文件加载配置
+// LoadConfigFile 加载配置文件
 func LoadConfigFile(filePath string) error {
-	return ini.MapTo(&GlobalConfig, filePath)
+	return ini.MapTo(&Config, filePath)
 }

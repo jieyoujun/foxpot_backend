@@ -2,53 +2,61 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"log"
 
 	"github.com/likiiiiii/foxpot_backend/models"
 	"github.com/likiiiiii/foxpot_backend/routers"
 	"github.com/likiiiiii/foxpot_backend/utils"
+	"go.uber.org/zap"
 )
+
+// 把大象塞进冰箱分几步
+// 答曰: 三步
+// 1.把冰箱门打开
+// 2.把大象塞进去
+// 3.把冰箱门带上
+
+// 创建后台分几步
+// 答曰: 同上
+// 0.加载配置
+// 1.初始化
+// 2.跑
 
 func main() {
 	configFilePath := flag.String("c", "etc/my.ini", "Path to config file")
 	flag.Parse()
 	// 0. 加载配置
-	err := utils.LoadConfigFile(*configFilePath)
-	if err != nil {
-		log.Fatalln("Failed to parse config file:", err)
+	if err := utils.LoadConfigFile(*configFilePath); err != nil {
+		log.Fatalf("Failed to load config from %v, err: %v\n", *configFilePath, err)
 	}
-	fmt.Printf("%#v\n", utils.GlobalConfig)
 	// 1. 初始化
-	if err := models.InitDB(); err != nil {
-		log.Fatalln("Failed to init database:", err)
+	// 1.1 日志
+	if err := utils.InitLogger(); err != nil {
+		log.Fatalf("Failed to initiate logger, err: %v\n", err)
 	}
-
+	// >>>>>>>>>>>>>>>>>>>>日志起于此处<<<<<<<<<<<<<<<<<<<<
+	// 1.2 数据库
+	if err := models.InitDB(); err != nil {
+		utils.Logger.Fatalw("Failed to initiate database.", zap.String("Error", err.Error()))
+	}
+	utils.Logger.Debugw("Succeed to initiate database.")
+	// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+	// 需要安全退出的请在1.3之前初始化
+	// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	// 1.3 安全退出
 	defer func() {
 		if err := models.DB.Close(); err != nil {
-			log.Fatalln("Failed to close db connection:", err)
+			utils.Logger.Fatalw("Failed to close database clearly.", zap.String("Error", err.Error()))
+		}
+		if err := utils.Logger.Sync(); err != nil {
+			log.Fatalf("Failed to close logger clearly, err: %v\n", err)
 		}
 	}()
-	gEngine := routers.Init()
+	// 1.4 HTTP服务
+	routers.Init()
+	utils.Logger.Debugw("Succeed to initiate router.")
 	// 2. 启动
-	if err := gEngine.Run(utils.GlobalConfig.Foxpot.Address); err != nil {
-		log.Fatalln("Failed to start server:", err)
+	if err := routers.GEngine.Run(utils.Config.Foxpot.Address); err != nil {
+		utils.Logger.Fatalw("Failed to start server.", zap.String("Error", err.Error()))
 	}
 }
-
-// 插入测试用户
-// hashedPassword, _ := utils.HashPassword("1212")
-// models.CreateUser(&models.User{
-// 	Username:       "liki",
-// 	HashedPassword: hashedPassword,
-// 	Role:           "admin",
-// 	Email:          "admin@foxpot.com",
-// 	Phone:          "19801209704",
-// })
-// models.CreateUser(&models.User{
-// 	Username:       "niki",
-// 	HashedPassword: hashedPassword,
-// 	Role:           "user",
-// 	Email:          "user@foxpot.com",
-// 	Phone:          "19801209704",
-// })

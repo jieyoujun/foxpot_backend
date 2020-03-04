@@ -4,7 +4,7 @@ import (
 	"time"
 )
 
-// User ...
+// User 系统用户
 type User struct {
 	ID             uint `gorm:"primary_key"`
 	CreatedAt      time.Time
@@ -32,7 +32,7 @@ func DeleteUser(user *User) error {
 	return DB.Delete(user).Error
 }
 
-// UpdateUser 更新用户信息
+// UpdateUser 更新用户
 func UpdateUser(user *User) error {
 	return DB.Save(user).Error
 }

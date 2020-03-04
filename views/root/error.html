@@ -1,12 +1,11 @@
 {{ define "error.html" }}
 <!DOCTYPE html>
 <html>
-<head>
-    <title>{{ .code }} - {{ .message }}</title>
-    </style>
-</head>
-<body>
-    <h2>{{ .message }}</h2>
-</body>
+    <head>
+        <title>{{ .title }} - 猎狐蜜罐</title>
+    </head>
+    <body>
+        <h2>{{ .code }} {{ .message }}</h2>
+    </body>
 </html>
 {{ end }}

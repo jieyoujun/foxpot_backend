@@ -1,1 +1,1 @@
-alert("welcome to index");
+alert("welcome!");
