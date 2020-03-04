@@ -5,17 +5,7 @@ import (
 )
 
 // NewCookieSessions ...
-func NewCookieSessions() cookie.Store {
-	store := cookie.NewStore([]byte(Secret))
-	// store.Options(sessions.Options{
-	// 	Path:     "/",
-	// 	Domain:   "localhost",
-	// 	MaxAge:   int(5 * time.Minute),
-	// 	Secure:   true,
-	// 	HttpOnly: true,
-	// 	SameSite: http.SameSiteLaxMode,
-	// })
+func NewCookieSessions(secret string) cookie.Store {
+	store := cookie.NewStore([]byte(secret))
 	return store
 }
-
-// NewRedisSessions ...

@@ -1,28 +1,30 @@
 package models
 
 import (
-	"log"
+	"time"
 
 	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mysql" // mysql driver
+	_ "github.com/jinzhu/gorm/dialects/sqlite" // sqlite driver
+	"github.com/likiiiiii/foxpot_backend/utils"
 )
 
-// DB ...
-var DB *gorm.DB
+// DB 数据库
+var (
+	DB *gorm.DB
+)
 
-// InitDB ...
+// InitDB 初始化数据库
 func InitDB() (err error) {
-	DB, err = gorm.Open("mysql", "root:1212@tcp(localhost:3306)/gorm_test?charset=utf8&parseTime=True&loc=Local")
+	DB, err = gorm.Open(utils.GlobalConfig.DB.Type, utils.GlobalConfig.DB.DSN)
 	if err != nil {
-		return nil
+		return err
+	}
+	// 配置连接池
+	DB.DB().SetMaxOpenConns(utils.GlobalConfig.DB.MaxOpenConn)
+	DB.DB().SetMaxIdleConns(utils.GlobalConfig.DB.MaxIdleConn)
+	DB.DB().SetConnMaxLifetime(time.Duration(utils.GlobalConfig.DB.MaxLifeTime) * time.Second)
+	if !DB.HasTable(&User{}) {
+		DB.AutoMigrate(&User{})
 	}
 	return nil
-}
-
-// InitDBAndMigrateAll ...
-func InitDBAndMigrateAll() {
-	if err := InitDB(); err != nil {
-		log.Fatalln("Failed to connect to mysql:", err)
-	}
-	DB.AutoMigrate(&User{})
 }

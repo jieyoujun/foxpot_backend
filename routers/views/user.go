@@ -1,4 +1,4 @@
-package apis
+package views
 
 import (
 	"net/http"
@@ -12,8 +12,8 @@ import (
 // GetUserIndex ...
 func GetUserIndex(c *gin.Context) {
 	session := sessions.Default(c)
-	userID, _ := session.Get(utils.SessionKey).(uint)
-	user, _ := models.SelectUserByID(userID)
+	userID, _ := session.Get(utils.GlobalConfig.Session.Key).(uint)
+	user, _ := models.GetUserByID(userID)
 	c.HTML(http.StatusOK, "user/index.html", gin.H{
 		"code":    200,
 		"message": "",

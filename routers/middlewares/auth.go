@@ -13,8 +13,8 @@ import (
 func UserRequired() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		session := sessions.Default(c)
-		if userID, ok := session.Get(utils.SessionKey).(uint); ok {
-			if user, err := models.SelectUserByID(userID); err == nil && !user.IsAdmin() {
+		if userID, ok := session.Get(utils.GlobalConfig.Session.Key).(uint); ok {
+			if user, err := models.GetUserByID(userID); err == nil && !user.IsAdmin() {
 				c.Next()
 				return
 			}
@@ -33,8 +33,8 @@ func UserRequired() gin.HandlerFunc {
 func AdminRequired() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		session := sessions.Default(c)
-		if userID, ok := session.Get(utils.SessionKey).(uint); ok {
-			if user, err := models.SelectUserByID(userID); err == nil && user.IsAdmin() {
+		if userID, ok := session.Get(utils.GlobalConfig.Session.Key).(uint); ok {
+			if user, err := models.GetUserByID(userID); err == nil && user.IsAdmin() {
 				c.Next()
 				return
 			}

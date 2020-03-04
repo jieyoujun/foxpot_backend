@@ -1,6 +1,8 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"log"
 
 	"github.com/likiiiiii/foxpot_backend/models"
@@ -8,36 +10,45 @@ import (
 	"github.com/likiiiiii/foxpot_backend/utils"
 )
 
-var ()
-
 func main() {
+	configFilePath := flag.String("c", "etc/my.ini", "Path to config file")
+	flag.Parse()
 	// 0. 加载配置
-	utils.LoadConfig()
+	err := utils.LoadConfigFile(*configFilePath)
+	if err != nil {
+		log.Fatalln("Failed to parse config file:", err)
+	}
+	fmt.Printf("%#v\n", utils.GlobalConfig)
 	// 1. 初始化
-	models.InitDBAndMigrateAll()
-	defer models.DB.Close()
+	if err := models.InitDB(); err != nil {
+		log.Fatalln("Failed to init database:", err)
+	}
+
+	defer func() {
+		if err := models.DB.Close(); err != nil {
+			log.Fatalln("Failed to close db connection:", err)
+		}
+	}()
 	gEngine := routers.Init()
 	// 2. 启动
-	if err := gEngine.Run(); err != nil {
-		log.Fatalln("Failed to start server")
+	if err := gEngine.Run(utils.GlobalConfig.Foxpot.Address); err != nil {
+		log.Fatalln("Failed to start server:", err)
 	}
 }
 
 // 插入测试用户
 // hashedPassword, _ := utils.HashPassword("1212")
-// models.InsertUser(&models.User{
+// models.CreateUser(&models.User{
 // 	Username:       "liki",
-// 	Password:       "1212",
 // 	HashedPassword: hashedPassword,
-// 	Role:           "administrator",
-// 	Email:          "liki@foxpot.com",
+// 	Role:           "admin",
+// 	Email:          "admin@foxpot.com",
 // 	Phone:          "19801209704",
 // })
-// models.InsertUser(&models.User{
+// models.CreateUser(&models.User{
 // 	Username:       "niki",
-// 	Password:       "1212",
 // 	HashedPassword: hashedPassword,
 // 	Role:           "user",
-// 	Email:          "niki@foxpot.com",
+// 	Email:          "user@foxpot.com",
 // 	Phone:          "19801209704",
 // })
