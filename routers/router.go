@@ -3,6 +3,7 @@ package routers
 import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
+	v1 "github.com/likiiiiii/foxpot_backend/routers/apis/v1"
 	"github.com/likiiiiii/foxpot_backend/routers/middlewares"
 	"github.com/likiiiiii/foxpot_backend/routers/views"
 	"github.com/likiiiiii/foxpot_backend/utils"
@@ -26,7 +27,7 @@ func Init() {
 	// >>>>>>>>>>>
 	// 这里是中间件
 	// <<<<<<<<<<<
-	GEngine.Use(gin.Recovery())
+	GEngine.Use(gin.Logger(), gin.Recovery())
 	GEngine.Use(middlewares.Logger(), sessions.Sessions(utils.Config.Session.Key, utils.NewCookieSessions(utils.Config.Session.Secret)))
 	// >>>>>>>>>
 	// 这里是路由
@@ -45,6 +46,11 @@ func Init() {
 	user := GEngine.Group("/user", middlewares.UserRequired())
 	{
 		user.GET("/", views.GetUserIndex)
+	}
+
+	apiv1 := GEngine.Group("/api/v1")
+	{
+		apiv1.GET("/captcha", v1.GetCaptcha)
 	}
 	// >>>>>>>>>
 	// 这里是404

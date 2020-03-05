@@ -6,6 +6,9 @@
     </head>
     <body>
         <h2>{{ .code }} {{ .message }}</h2>
+        {{ with .data }}
+        <p>{{ . }}</p>
+        {{ end }}
     </body>
 </html>
 {{ end }}

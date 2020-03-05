@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/dchest/captcha"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/likiiiiii/foxpot_backend/models"
@@ -65,6 +66,16 @@ func GetLogout(c *gin.Context) {
 
 // PostLogin 登录POST
 func PostLogin(c *gin.Context) {
+	session := sessions.Default(c)
+	captchaCode := c.PostForm("captcha")
+	if captchaID, ok := session.Get("captcha").(string); !ok || !captcha.VerifyString(captchaID, captchaCode) {
+		c.HTML(http.StatusBadRequest, "login.html", gin.H{
+			"code":    400,
+			"message": "验证码错误",
+			"title":   "登录",
+		})
+		return
+	}
 	username := c.PostForm("username")
 	password := c.PostForm("password")
 	if username == "" || password == "" {
@@ -86,13 +97,8 @@ func PostLogin(c *gin.Context) {
 	}
 	user.LastLoginAt = time.Now()
 	models.UpdateUser(user)
-	session := sessions.Default(c)
 	session.Clear()
 	session.Set(utils.Config.Session.Key, user.ID)
 	session.Save()
-	if user.IsAdmin() {
-		c.Redirect(http.StatusMovedPermanently, "/admin")
-		return
-	}
-	c.Redirect(http.StatusMovedPermanently, "/user")
+	c.Redirect(http.StatusFound, "/")
 }
