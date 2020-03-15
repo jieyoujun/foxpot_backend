@@ -14,9 +14,11 @@
         <style>
             /* 顶栏 */
             .header {
+                position: relative;
                 max-height: 100px;
                 border-bottom: 1px solid transparent;
                 box-shadow: 0 1px 4px rgba(0,21,41,.08);
+                z-index: 1000;
             }
             /* Logo */
             .header .logo {
@@ -78,7 +80,6 @@
                 width: 200px;
                 min-height: 100%;
                 background-color: #04142a;
-                z-index: -1;
             }
             .sidebar ul {
                padding: 0;
@@ -108,6 +109,12 @@
             }
             .sidebar .treeview-menu li {
                 background-color: #000;
+            }
+
+            /* 主体内容 */
+            .content {
+                margin-left: 200px;
+                min-height: 480px;
             }
         </style>
     </head>
@@ -145,36 +152,56 @@
             <section>
                 <ul class="sidebar-menu" data-widget="tree">
                     <li>
-                        <a href="#"><i class="fa fa-map"></i><span>攻击地图</span></a>
+                        <a><i class="fa fa-map"></i><span>攻击地图</span></a>
+                    </li>
+                    <li data-src="http://localhost:5601/app/kibana#/discover?embed=true&_g=(refreshInterval:(pause:!t,value:0),time:(from:now-15m,to:now))&_a=(columns:!(_source),index:'7a7bb4e0-66db-11ea-8b9b-fd69842a5acd',interval:auto,query:(language:kuery,query:''),sort:!(!(alert.createdAt,desc)))">
+                        <a><i class="fa fa-warning"></i><span>告警详情</span></a>
+                    </li>
+                    <li data-src="http://www.baidu.com">
+                        <a><i class="fa fa-warning"></i><span>测试百度一下</span></a>
                     </li>
                     <li>
-                        <a href="#"><i class="fa fa-warning"></i><span>告警详情</span></a>
+                        <a><i class="fa fa-tasks"></i><span>蜜罐管理</span></a>
                     </li>
                     <li>
-                        <a href="#"><i class="fa fa-tasks"></i><span>蜜罐管理</span></a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-desktop"></i><span>状态监控</span></a>
+                        <a><i class="fa fa-desktop"></i><span>状态监控</span></a>
                     </li>
                     <li class="treeview">
-                        <a href="#"><i class="fa fa-wrench"></i><span>系统组件</span></a>
+                        <a><i class="fa fa-wrench"></i><span>系统组件</span></a>
                         <ul class="treeview-menu">
-                            <li><a href="#"><i class="fa fa-table"></i><span>Kibana</span></a></li>
-                            <li><a href="#"><i class="fa fa-search"></i><span>ESHead</span></a></li>
-                            <li><a href="#"><i class="fa fa-terminal"></i><span>Cockpit</span></a></li>
+                            <li><a><i class="fa fa-table"></i><span>Kibana</span></a></li>
+                            <li><a><i class="fa fa-search"></i><span>ESHead</span></a></li>
+                            <li><a><i class="fa fa-terminal"></i><span>Cockpit</span></a></li>
                         </ul>
                     </li>
                     <li class="treeview">
-                        <a href="#"><i class="fa fa-cogs"></i><span>系统设置</span></a>
+                        <a><i class="fa fa-cogs"></i><span>系统设置</span></a>
                         <ul class="treeview-menu">
-                            <li><a href="#"><i class="fa fa-user"></i><span>用户管理</span></a></li>
-                            <li><a href="#"><i class="fa fa-cog"></i><span>系统配置</span></a></li>
+                            <li><a><i class="fa fa-user"></i><span>用户管理</span></a></li>
+                            <li><a><i class="fa fa-cog"></i><span>系统配置</span></a></li>
                         </ul>
                     </li>
                 </ul>
             </section>
         </aside>
-        <div class="content"></div>
+        <div class="content">
+            <iframe frameborder=0 srolling=no width="100%" height="500px" src="http://localhost:5601/app/kibana#/discover?embed=true&_g=(refreshInterval:(pause:!t,value:0),time:(from:now-15m,to:now))&_a=(columns:!(_source),index:'7a7bb4e0-66db-11ea-8b9b-fd69842a5acd',interval:auto,query:(language:kuery,query:''),sort:!(!(alert.createdAt,desc)))" ></iframe>
+        </div>
+        <script>
+            // TODO
+            // https跨域问题, 1或者3
+                // 1.把iframe中的http升级成https。
+                // 2.https站点降级http，就能访问iframe http。
+                // 3.通过nigix做映射，页面写访问https，但nigix接收后转成http发送出去。
+            // 1. iframe高度自适应, 
+            // 2. 其他页面
+            $(function(){
+                $(".sidebar-menu li").on("click",function(){
+                        var address =$(this).attr("data-src");
+                    $("iframe").attr("src",address);
+                });
+            });
+        </script>
     </body>
 </html>
 {{ end }}

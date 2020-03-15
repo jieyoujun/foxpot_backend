@@ -56,6 +56,9 @@ func main() {
 	routers.Init()
 	utils.Logger.Debugw("Succeed to initiate router.")
 	// 2. 启动
+	// if err := routers.GEngine.RunTLS(utils.Config.Foxpot.Address, utils.Config.Foxpot.SSLCert, utils.Config.Foxpot.SSLKey); err != nil {
+	// 	utils.Logger.Fatalw("Failed to start server.", zap.String("Error", err.Error()))
+	// }
 	if err := routers.GEngine.Run(utils.Config.Foxpot.Address); err != nil {
 		utils.Logger.Fatalw("Failed to start server.", zap.String("Error", err.Error()))
 	}

@@ -19,6 +19,8 @@ type foxpotConfig struct {
 	Address  string `ini:"addr"`
 	LogPath  string `ini:"log_path"`
 	LogLevel string `ini:"log_level"`
+	SSLCert  string `ini:"ssl_cert"`
+	SSLKey   string `ini:"ssl_key"`
 }
 
 type dbConfig struct {
