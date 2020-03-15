@@ -1,8 +1,10 @@
 # Foxpot Backend by Go
-
+[Demo](http://39.105.107.164:61280)
+测试用户名：liki
+测试密码：1212
 ## 项目结构
 ```
--foxpot_backend
+foxpot_backend
     |-etc 系统配置
     |-models 应用数据库模型和其他共用结构体
     |-routers 路由逻辑处理
