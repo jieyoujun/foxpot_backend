@@ -3,7 +3,7 @@
 <html>
     <head>
         <title>{{ .title }} - 猎狐蜜罐</title>
-        <link rel="stylesheet" href="/statics/css/index.css">
+        <link rel="stylesheet" href="/statics/css/my.css">
         <link rel="stylesheet" href="/statics/css/bootstrap.min.css">
         <link rel="stylesheet" href="/statics/css/font-awesome.min.css">
         <!-- <link rel="stylesheet" href="/statics/css/adminlte.min.css"> -->
@@ -18,7 +18,7 @@
                 max-height: 100px;
                 border-bottom: 1px solid transparent;
                 box-shadow: 0 1px 4px rgba(0,21,41,.08);
-                z-index: 1000;
+                z-index: 1;
             }
             /* Logo */
             .header .logo {
@@ -154,7 +154,7 @@
                     <li>
                         <a><i class="fa fa-map"></i><span>攻击地图</span></a>
                     </li>
-                    <li data-src="http://localhost:5601/app/kibana#/discover?embed=true&_g=(refreshInterval:(pause:!t,value:0),time:(from:now-15m,to:now))&_a=(columns:!(_source),index:'7a7bb4e0-66db-11ea-8b9b-fd69842a5acd',interval:auto,query:(language:kuery,query:''),sort:!(!(alert.createdAt,desc)))">
+                    <li data-src="https://localhost:5601/app/kibana#/discover?embed=true&_g=(refreshInterval:(pause:!t,value:0),time:(from:now-15m,to:now))&_a=(columns:!(_source),index:'7a7bb4e0-66db-11ea-8b9b-fd69842a5acd',interval:auto,query:(language:kuery,query:''),sort:!(!(alert.createdAt,desc)))">
                         <a><i class="fa fa-warning"></i><span>告警详情</span></a>
                     </li>
                     <li data-src="http://www.baidu.com">
@@ -185,20 +185,24 @@
             </section>
         </aside>
         <div class="content">
-            <iframe frameborder=0 srolling=no width="100%" height="500px" src="http://localhost:5601/app/kibana#/discover?embed=true&_g=(refreshInterval:(pause:!t,value:0),time:(from:now-15m,to:now))&_a=(columns:!(_source),index:'7a7bb4e0-66db-11ea-8b9b-fd69842a5acd',interval:auto,query:(language:kuery,query:''),sort:!(!(alert.createdAt,desc)))" ></iframe>
+            <iframe frameborder=0 scrolling=no width="100%" height="500px" src="https://www.baidu.com" ></iframe>
         </div>
         <script>
             // TODO
             // https跨域问题, 1或者3
-                // 1.把iframe中的http升级成https。
-                // 2.https站点降级http，就能访问iframe http。
-                // 3.通过nigix做映射，页面写访问https，但nigix接收后转成http发送出去。
-            // 1. iframe高度自适应, 
+                // 1.把iframe中的http升级成https。 ok
+                // 2.https站点降级http，就能访问iframe http。 not my way
+                // 3.通过nigix做映射，页面写访问https，但nigix接收后转成http发送出去。 todo
+            // 1. iframe高度自适应
+            window.onresize = function() {
+                var newHeight = document.documentElement.clientHeight - 60;
+                $("iframe").attr("height", newHeight);
+            }
             // 2. 其他页面
             $(function(){
-                $(".sidebar-menu li").on("click",function(){
-                        var address =$(this).attr("data-src");
-                    $("iframe").attr("src",address);
+                $(".sidebar-menu li").on("click", function(){
+                    var address = $(this).attr("data-src");
+                    $("iframe").attr("src", address);
                 });
             });
         </script>
