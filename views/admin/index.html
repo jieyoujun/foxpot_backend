@@ -115,6 +115,9 @@
             .content {
                 margin-left: 200px;
                 min-height: 480px;
+                padding: 18px 21px;
+                padding-bottom: 0px;
+                background-color: #ecf0f5;
             }
         </style>
     </head>
@@ -157,9 +160,6 @@
                     <li data-src="https://localhost:5601/app/kibana#/discover?embed=true&_g=(refreshInterval:(pause:!t,value:0),time:(from:now-15m,to:now))&_a=(columns:!(_source),index:'7a7bb4e0-66db-11ea-8b9b-fd69842a5acd',interval:auto,query:(language:kuery,query:''),sort:!(!(alert.createdAt,desc)))">
                         <a><i class="fa fa-warning"></i><span>告警详情</span></a>
                     </li>
-                    <li data-src="http://www.baidu.com">
-                        <a><i class="fa fa-warning"></i><span>测试百度一下</span></a>
-                    </li>
                     <li>
                         <a><i class="fa fa-tasks"></i><span>蜜罐管理</span></a>
                     </li>
@@ -177,7 +177,7 @@
                     <li class="treeview">
                         <a><i class="fa fa-cogs"></i><span>系统设置</span></a>
                         <ul class="treeview-menu">
-                            <li><a><i class="fa fa-user"></i><span>用户管理</span></a></li>
+                            <li data-src="usermanage"><a><i class="fa fa-user"></i><span>用户管理</span></a></li>
                             <li><a><i class="fa fa-cog"></i><span>系统配置</span></a></li>
                         </ul>
                     </li>
@@ -185,7 +185,7 @@
             </section>
         </aside>
         <div class="content">
-            <iframe frameborder=0 scrolling=no width="100%" height="500px" src="https://www.baidu.com" ></iframe>
+            <iframe frameborder=0 scrolling=no width="100%" height="500px" src="https://www.bilibili.com" ></iframe>
         </div>
         <script>
             // TODO
@@ -195,7 +195,7 @@
                 // 3.通过nigix做映射，页面写访问https，但nigix接收后转成http发送出去。 todo
             // 1. iframe高度自适应
             window.onresize = function() {
-                var newHeight = document.documentElement.clientHeight - 60;
+                var newHeight = document.documentElement.clientHeight;
                 $("iframe").attr("height", newHeight);
             }
             // 2. 其他页面

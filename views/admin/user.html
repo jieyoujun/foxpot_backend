@@ -1,0 +1,142 @@
+{{ define "admin/usermanage.html"}}
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="/statics/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/statics/css/font-awesome.min.css">
+        <link rel="stylesheet" href="/statics/css/adminlte.min.css">
+        <link rel="stylesheet" href="/statics/css/square/square.css">
+        <script type="text/javascript" src="/statics/js/jquery-3.4.1.min.js"></script>
+        <script type="text/javascript" src="/statics/js/popper.min.js"></script>
+        <script type="text/javascript" src="/statics/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/statics/js/adminlte.min.js"></script>
+        <script type="text/javascript" src="/statics/js/icheck.min.js"></script>
+        <style>
+            body {
+               font-family: Segoe UI;
+            }
+            .action {
+                padding: 10px;
+                box-shadow: 0 1px 1px rgba(0,0,0,.1);
+            }
+            .action .btn {
+                margin-left: 10px;
+                padding: 5px 8px;
+                font-size: 14px;
+                line-height: 1.5;
+            }
+            
+            .box table {
+                width: 100%;
+            }
+
+            table>tbody>tr>th {
+                background-color: #fafafa;
+                border-bottom: 1px solid #ccc;
+                word-break: keep-all;
+            }
+
+            .table td, .table th {
+                padding: .75rem;
+                vertical-align: middle;
+                border-top: 1px solid #dee2e6;
+                text-align: center;
+            }
+            
+        </style>
+    </head>
+    <body>
+        <div class="box">
+            {{ if not .Users }}
+            <h2>错误</h2>
+            {{ else }}
+            <div class="action">
+                <span>
+                    <a href="" class="btn btn-sm btn-default"><i class="fa fa-plus"></i>&nbsp;&nbsp;新建</a>
+                    <a href="" class="btn btn-sm btn-default"><i class="fa fa-trash"></i>&nbsp;&nbsp;删除</a>
+                    <a href="" class="btn btn-sm btn-default"><i class="fa fa-edit"></i>&nbsp;&nbsp;编辑</a>
+                    <a class="btn btn-sm btn-primary grid-refresh" style="color: #fff;"><i class="fa fa-refresh"></i>&nbsp;刷新</a>
+                </span>
+            </div>
+            <table class="table table-hover">
+                <tbody>
+                    <tr>
+                        <th>
+                            <input type="checkbox" class="select-all">
+                        </th>
+                        <th>ID</th>
+                        <th>用户名</th>
+                        <th>权限</th>
+                        <th>邮箱</th>
+                        <th>手机</th>
+                        <th>创建时间</th>
+                        <th>最近登录时间</th>
+                    </tr>
+                    {{ range $idx, $user := .Users }}
+                    <tr>
+                        <td style="text-align: center;">
+                            <input type="checkbox" class="select-one">
+                        </td>
+                        <td>
+                            {{ $idx | autoincrement }}
+                        </td>
+                        <td data="{{$user.Username}}">
+                            {{ $user.Username }}
+                        </td>
+                        <td>
+                            {{ $user.Role }}
+                        </td>
+                        <td>
+                            {{ $user.Email }}
+                        </td>
+                        <td>
+                            {{ $user.Phone }}
+                        </td>
+                        <td>
+                            {{ $user.CreatedAt.Format "2006/01/02 15:04:05" }}
+                        </td>
+                        <td>
+                            {{ $user.LastLoginAt.Format "2006/01/02 15:04:05" }}
+                        </td>
+                    </tr>
+                    {{ end }}
+                </tbody>
+            </table>
+            <!-- TODO -->
+            <!-- 分页 -->
+            {{ end }}
+        </div>
+        <script>
+            $(document).ready(function(){
+              $('input').iCheck({
+                checkboxClass: 'icheckbox_square',
+                radioClass: 'iradio_square',
+                increaseArea: '20%' // optional
+              });
+            });
+
+
+            $('.select-all').on('ifChanged', function(event){
+                if (this.checked) {
+                    $('.select-one').iCheck('check');
+                } else {
+                    $('.select-one').iCheck('uncheck');
+                }
+            });
+
+            $('.select-one').on('ifChanged', function(event){
+                if (this.checked) {
+                    $(this).closest('tr').css('background-color','#ffffd5');
+                    if ($('.select-one').filter(':checked').length == $('.select-one').length) {
+                        $('.select-all').iCheck('check');
+                    }
+                }
+                else {
+                    $(this).closest('tr').css('background-color','');
+                    $('.select-all').iCheck('uncheck');
+                }
+            });
+        </script>
+    </body>
+</html>
+{{ end }}
