@@ -136,13 +136,13 @@
                         <li>路径2</li>
                     </ol>
                 </div>
-                <div >
+                <div>
                     <a href="#" data-toggle="dropdown">
                         <img width="36" height="36" src="/statics/images/avatar.jpg">
                     </a>
                     <ul class="dropdown-menu">
-                        <li>
-                            <a href="#" width="20px">个人中心</a>
+                        <li data-src="profile">
+                            <a width="20px">个人中心</a>
                         </li>
                         <li>
                             <a href="/logout">退出登录</a>
@@ -185,7 +185,7 @@
             </section>
         </aside>
         <div class="content">
-            <iframe frameborder=0 scrolling=no width="100%" height="500px" src="https://www.bilibili.com" ></iframe>
+            <iframe frameborder=0 width="100%" height="500px" src="https://www.bilibili.com" ></iframe>
         </div>
         <script>
             // TODO
@@ -201,6 +201,13 @@
             // 2. 其他页面
             $(function(){
                 $(".sidebar-menu li").on("click", function(){
+                    var address = $(this).attr("data-src");
+                    $("iframe").attr("src", address);
+                });
+            });
+
+            $(function(){
+                $(".dropdown-menu li").on("click", function(){
                     var address = $(this).attr("data-src");
                     $("iframe").attr("src", address);
                 });

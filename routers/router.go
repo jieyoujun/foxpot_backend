@@ -18,14 +18,11 @@ var GEngine *gin.Engine
 func Init() {
 	GEngine = gin.New()
 	// 1.4.1 注册模板函数
-	// >>>>>>>>>>>>>>>>>
-	// 这里写注册模板函数
 	GEngine.SetFuncMap(template.FuncMap{
 		"autoincrement": func(num int) int {
 			return num + 1
 		},
 	})
-	// <<<<<<<<<<<<<<<<<
 	// 1.4.2 注册模板文件
 	GEngine.LoadHTMLGlob("views/**/*")
 	// 1.4.3 注册静态文件
@@ -49,7 +46,11 @@ func Init() {
 	admin := GEngine.Group("/admin", middlewares.AdminRequired())
 	{
 		admin.GET("/", views.GetAdminIndex)
+		admin.GET("/profile", views.GetAdminProfile)
 		admin.GET("/usermanage", views.GetAdminUserManage)
+		admin.GET("/createuser", views.GetAdminCreateUser)
+		admin.POST("/createuser", views.PostAdminCreateUser)
+		admin.POST("/deleteuser", views.PostAdminDeleteUser)
 	}
 	user := GEngine.Group("/user", middlewares.UserRequired())
 	{

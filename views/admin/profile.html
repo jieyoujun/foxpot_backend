@@ -1,0 +1,16 @@
+{{ define "admin/profile.html"}}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{ .title }} - 猎狐蜜罐</title>
+        <link rel="stylesheet" href="/statics/css/my.css">
+    </head>
+    <body>
+        <h1>Welcome to index page!</h1>
+        {{ with .User }}
+        <h2>I am {{ .Username }}, my password is {{ .HashedPassword }}</h2>
+        {{ end }}
+        <a href="/logout">退出登录</a>
+    </body>
+</html>
+{{ end }}
