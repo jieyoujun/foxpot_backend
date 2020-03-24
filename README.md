@@ -36,10 +36,11 @@ foxpot_backend
 - [x] 登录添加验证码
 - [x] 配置文件
 - [x] SSL
-- [ ] endless
-- [ ] 完善api 返回数据格式 错误码等等
-- [ ] https跨域问题
+- [x] 用户管理增删改
 - [ ] iframe高度自适应
+- [ ] https跨域问题
+- [ ] 用户管理页面美化
+- [ ] endless
 - [ ] 其他页面
 - [ ] ... 
 
