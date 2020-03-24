@@ -32,6 +32,11 @@ func DeleteUser(user *User) error {
 	return DB.Delete(user).Error
 }
 
+// DeleteUserByUsername 通过用户名删除用户
+func DeleteUserByUsername(userName string) error {
+	return DB.Where("username = ?", userName).Delete(&User{}).Error
+}
+
 // UpdateUser 更新用户
 func UpdateUser(user *User) error {
 	return DB.Save(user).Error

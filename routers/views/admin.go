@@ -1,7 +1,6 @@
 package views
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -50,12 +49,10 @@ func GetAdminUserManage(c *gin.Context) {
 
 // GetAdminCreateUser 新建用户
 func GetAdminCreateUser(c *gin.Context) {
-	users, _ := models.GetAllUsers()
 	c.HTML(http.StatusOK, "admin/createuser.html", gin.H{
 		"code":    200,
 		"message": "",
 		"title":   "新建用户",
-		"Users":   users,
 	})
 }
 
@@ -108,24 +105,21 @@ func PostAdminCreateUser(c *gin.Context) {
 
 // PostAdminDeleteUser 删除用户
 func PostAdminDeleteUser(c *gin.Context) {
-	// data, _ := ioutil.ReadAll(c.Request.Body)
-	// fmt.Printf("%v", string(data))
-
-	type User struct {
-		Username []string `json:"username"`
+	var (
+		usernames []string
+		deleted   []string
+	)
+	c.ShouldBind(&usernames)
+	fmt.Printf("%#v", usernames)
+	for _, username := range usernames {
+		// TODO 做成事务  错误回滚
+		if err := models.DeleteUserByUsername(username); err == nil {
+			deleted = append(deleted, username)
+		}
 	}
-	var u User
-	json.NewDecoder(c.Request.Body).Decode(&u)
-	fmt.Printf("%v", u)
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
-		"message": "asdfadsf",
-		"data":    u,
+		"message": "删除成功",
+		"data":    deleted,
 	})
-	// c.HTML(http.StatusOK, "admin/createuser.html", gin.H{
-	// 	"code":    200,
-	// 	"message": "",
-	// 	"title":   "新建用户",
-	// 	"Users":   users,
-	// })
 }
