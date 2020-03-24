@@ -22,6 +22,13 @@ func Init() {
 		"autoincrement": func(num int) int {
 			return num + 1
 		},
+		"timeBeautifier": func(timeString string) string {
+			if timeString == "0001/01/01 00:00:00" {
+				return ""
+			} else {
+				return timeString
+			}
+		},
 	})
 	// 1.4.2 注册模板文件
 	GEngine.LoadHTMLGlob("views/**/*")
@@ -51,6 +58,8 @@ func Init() {
 		admin.GET("/createuser", views.GetAdminCreateUser)
 		admin.POST("/createuser", views.PostAdminCreateUser)
 		admin.POST("/deleteuser", views.PostAdminDeleteUser)
+		admin.GET("/updateuser", views.GetAdminUpdateUser)
+		admin.POST("/updateuser", views.PostAdminUpdateUser)
 	}
 	user := GEngine.Group("/user", middlewares.UserRequired())
 	{

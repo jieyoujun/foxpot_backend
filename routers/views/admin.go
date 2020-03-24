@@ -1,7 +1,6 @@
 package views
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-contrib/sessions"
@@ -110,7 +109,6 @@ func PostAdminDeleteUser(c *gin.Context) {
 		deleted   []string
 	)
 	c.ShouldBind(&usernames)
-	fmt.Printf("%#v", usernames)
 	for _, username := range usernames {
 		// TODO 做成事务  错误回滚
 		if err := models.DeleteUserByUsername(username); err == nil {
@@ -122,4 +120,42 @@ func PostAdminDeleteUser(c *gin.Context) {
 		"message": "删除成功",
 		"data":    deleted,
 	})
+}
+
+// GetAdminUpdateUser 更新用户信息
+func GetAdminUpdateUser(c *gin.Context) {
+	// TODO 参数判定下 这样不严格 防乱搞
+	username := c.DefaultQuery("username", "none")
+	user, _ := models.GetUserByUsername(username)
+	c.HTML(http.StatusOK, "admin/updateuser.html", gin.H{
+		"code":    200,
+		"message": "",
+		"title":   "更新用户信息",
+		"User":    user,
+	})
+}
+
+// PostAdminUpdateUser 更新用户信息
+func PostAdminUpdateUser(c *gin.Context) {
+	username := c.PostForm("username")
+	user, _ := models.GetUserByUsername(username)
+	user.Role = c.PostForm("role")
+	user.Email = c.PostForm("email")
+	user.Phone = c.PostForm("phone")
+	err := models.UpdateUser(user)
+	if err != nil {
+		c.HTML(http.StatusOK, "admin/updateuser.html", gin.H{
+			"code":    500,
+			"message": "更新失败",
+			"title":   "更新用户信息",
+			"User":    user,
+		})
+	} else {
+		c.HTML(http.StatusOK, "admin/updateuser.html", gin.H{
+			"code":    200,
+			"message": "更新成功",
+			"title":   "更新用户信息",
+			"User":    user,
+		})
+	}
 }

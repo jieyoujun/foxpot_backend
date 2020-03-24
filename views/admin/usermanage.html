@@ -54,7 +54,7 @@
                 <span>
                     <a data-src="createuser" class="btn btn-sm btn-default"><i class="fa fa-plus"></i>&nbsp;&nbsp;新建</a>
                     <button class="btn btn-sm btn-default" id="mydelete"><i class="fa fa-trash"></i>&nbsp;&nbsp;删除</button>
-                    <a data-src="updateuser" class="btn btn-sm btn-default"><i class="fa fa-edit"></i>&nbsp;&nbsp;编辑</a>
+                    <button class="btn btn-sm btn-default" id="myupdate"><i class="fa fa-edit"></i>&nbsp;&nbsp;编辑</button>
                     <a data-src="usermanage" class="btn btn-sm btn-primary grid-refresh" style="color: #fff;"><i class="fa fa-refresh"></i>&nbsp;刷新</a>
                 </span>
             </div>
@@ -64,7 +64,7 @@
                         <th>
                             <input type="checkbox" class="select-all">
                         </th>
-                        <th>ID</th>
+                        <th>No.</th>
                         <th>用户名</th>
                         <th>权限</th>
                         <th>邮箱</th>
@@ -96,7 +96,7 @@
                             {{ $user.CreatedAt.Format "2006/01/02 15:04:05" }}
                         </td>
                         <td>
-                            {{ $user.LastLoginAt.Format "2006/01/02 15:04:05" }}
+                            {{ $user.LastLoginAt.Format "2006/01/02 15:04:05" | timeBeautifier }}
                         </td>
                     </tr>
                     {{ end }}
@@ -107,6 +107,19 @@
             {{ end }}
         </div>
         <script>
+            // TODO 可以把 delete和update函数精简合并下 都有收集checked的username部分
+            $('#myupdate').click(function() {
+                let usernames = [];
+                $('.select-one:checked').each(function () {
+                    usernames.push($(this).data('username').toString());
+                });
+                if (usernames.length > 0 ) {
+                    window.parent.document.getElementsByTagName("iframe")[0].src = "updateuser?username="+usernames[0];
+                } else {
+                    alert("请宁乖");
+                }
+            });
+
             $(function(){
                 $(".action span a").on("click", function(){
                     window.parent.document.getElementsByTagName("iframe")[0].src = $(this).attr("data-src")
@@ -149,19 +162,30 @@
                 $('.select-one:checked').each(function () {
                     usernames.push($(this).data('username').toString());
                 });
-                console.log(usernames);
-                $.ajax({
-                    type: "POST",
-                    url: '/admin/deleteuser',
-                    contentType: 'application/json',
-                    data: JSON.stringify(usernames),
-                    dataType: 'json',
-                    success: function(data) {
-                        console.log(data);
-                        window.location.reload();
+                if (usernames.length > 0) {
+                    if (usernames.indexOf('liki') < 0) { // TODO 不能删超管 也不能删自己
+                        console.log(usernames);
+                        $.ajax({
+                            type: "POST",
+                            url: '/admin/deleteuser',
+                            contentType: 'application/json',
+                            data: JSON.stringify(usernames),
+                            dataType: 'json',
+                            success: function(data) {
+                                console.log(data);
+                                window.location.reload();
+                            },
+                        });
+                    } else {
+                        alert("请宁想开");
                     }
-                });
+                    
+                } else {
+                    alert("请宁乖");
+                }
             });
+
+            
         </script>
     </body>
 </html>

@@ -95,6 +95,7 @@ func PostLogin(c *gin.Context) {
 		})
 		return
 	}
+
 	user.LastLoginAt = time.Now()
 	models.UpdateUser(user)
 	session.Clear()

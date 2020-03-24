@@ -1,0 +1,91 @@
+{{ define "admin/updateuser.html"}}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="/statics/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/statics/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/statics/css/adminlte.min.css">
+    <link rel="stylesheet" href="/statics/css/square/square.css">
+    <script type="text/javascript" src="/statics/js/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="/statics/js/popper.min.js"></script>
+    <script type="text/javascript" src="/statics/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/statics/js/adminlte.min.js"></script>
+    <script type="text/javascript" src="/statics/js/icheck.min.js"></script>
+    <style>
+        body {
+            font-family: Segoe UI;
+        }
+
+        .action {
+            padding: 10px;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+        }
+
+        .action .btn {
+            margin-left: 10px;
+            padding: 5px 8px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <form id="_form" action="/admin/updateuser" method="POST" autocomplete="off">
+            <div class="action">
+                <span>
+                    <button class="btn btn-sm btn-default" type="submit"><i class="fa fa-share-square"></i>&nbsp;&nbsp;提交</button>
+                    <button class="btn btn-sm btn-default" type="reset"><i class="fa fa-undo"></i>&nbsp;&nbsp;重置</button>
+                    <a data-src="usermanage" class="btn btn-sm btn-primary grid-refresh" style="color: #fff;"><i class="fa fa-arrow-left"></i>&nbsp;返回</a>
+                    {{ if .message }}
+                    <a class="text-danger" style="padding-left: 10px;vertical-align: middle;">{{ .message }}</a>
+                    {{end}}
+                </span>
+            </div>
+            {{ with .User }}
+            <div class="box-body">
+                <div>
+                    <label>用户名</label>
+                    <input type="text" name="username" value="{{ .Username }}" readonly required>
+                </div>
+                <div>
+                    <label>权限</label>
+                    <select name="role" value="{{ .Role }}" required>
+                        <option value="user">普通用户</option>
+                        <option value="admin">管理员</option>
+                    </select>
+                    <script>
+                        $(function(){
+                            $("select option[value='{{ .Role }}']").attr("selected", true);
+                        });
+                    </script>
+                </div>
+                <div>
+                    <label>邮箱</label>
+                    <input type="email" name="email" value="{{ .Email }}">
+                </div>
+                <div>
+                    <label>手机</label>
+                    <input type="number" name="phone" value="{{ .Phone }}">
+                </div>
+                <div>
+                    <label>密码</label>
+                    <input type="text" name="text" value="{{ .HashedPassword }}" readonly>
+                </div>
+            </div>
+            {{ end }}
+        </form>
+    </div>
+    <script>
+        $(function(){
+            $(".action span a").on("click", function(){
+                window.parent.document.getElementsByTagName("iframe")[0].src = $(this).attr("data-src")
+            });
+        });
+    </script>
+</body>
+
+</html>
+{{ end }}
