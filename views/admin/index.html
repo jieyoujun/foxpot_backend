@@ -131,6 +131,7 @@
             <nav class="navbar">
                 <div>
                     <ol class="breadcrumb">
+                        <!-- TODO 从后台接受路径map -->
                         <li><a href="/">首页</a></li>
                         <li>路径1</li>
                         <li>路径2</li>
@@ -157,7 +158,7 @@
                     <li>
                         <a><i class="fa fa-map"></i><span>攻击地图</span></a>
                     </li>
-                    <li data-src="https://localhost:5601/app/kibana#/discover?embed=true&_g=(refreshInterval:(pause:!t,value:0),time:(from:now-15m,to:now))&_a=(columns:!(_source),index:'7a7bb4e0-66db-11ea-8b9b-fd69842a5acd',interval:auto,query:(language:kuery,query:''),sort:!(!(alert.createdAt,desc)))">
+                    <li>
                         <a><i class="fa fa-warning"></i><span>告警详情</span></a>
                     </li>
                     <li>
@@ -169,8 +170,8 @@
                     <li class="treeview">
                         <a><i class="fa fa-wrench"></i><span>系统组件</span></a>
                         <ul class="treeview-menu">
-                            <li><a><i class="fa fa-table"></i><span>Kibana</span></a></li>
-                            <li><a><i class="fa fa-search"></i><span>ESHead</span></a></li>
+                            <li data-src="https://192.168.85.128:64296/app/kibana#/?embed=true"><a><i class="fa fa-table"></i><span>Kibana</span></a></li>
+                            <li data-src="https://192.168.85.128:64302"><a><i class="fa fa-search"></i><span>ESHead</span></a></li>
                             <li><a><i class="fa fa-terminal"></i><span>Cockpit</span></a></li>
                         </ul>
                     </li>
@@ -185,7 +186,7 @@
             </section>
         </aside>
         <div class="content">
-            <iframe frameborder=0 width="100%" height="500px" src="https://www.bilibili.com" ></iframe>
+            <iframe frameborder=0 width="100%" height="500px" src="https://192.168.85.128:64296/app/kibana#/discover?embed=true" ></iframe>
         </div>
         <script>
             // TODO

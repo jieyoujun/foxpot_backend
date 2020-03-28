@@ -65,7 +65,6 @@ func Init() {
 	{
 		user.GET("/", views.GetUserIndex)
 	}
-
 	apiv1 := GEngine.Group("/api/v1")
 	{
 		apiv1.GET("/captcha", v1.GetCaptcha)
