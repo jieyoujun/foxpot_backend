@@ -12,6 +12,8 @@ import (
 type Configuration struct {
 	Foxpot  foxpotConfig  `ini:"foxpot"`
 	DB      dbConfig      `ini:"db"`
+	ES      esConfig      `ini:"es"`
+	GeoIP2  geoip2Config  `ini:"geoip2"`
 	Session sessionConfig `ini:"session"`
 }
 
@@ -29,6 +31,17 @@ type dbConfig struct {
 	MaxOpenConn int    `ini:"max_open_conn"`
 	MaxIdleConn int    `ini:"max_idle_conn"`
 	MaxLifeTime int    `ini:"max_life_time"`
+}
+
+type esConfig struct {
+	Address   string `ini:"addr"`
+	IndexName string `ini:"index"`
+}
+
+type geoip2Config struct {
+	ASNPath     string `ini:"asn_path"`
+	CityPath    string `ini:"city_path"`
+	CountryPath string `ini:"country_path"`
 }
 
 type sessionConfig struct {

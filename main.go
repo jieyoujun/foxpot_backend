@@ -29,6 +29,7 @@ func main() {
 	if err := utils.LoadConfigFile(*configFilePath); err != nil {
 		log.Fatalf("Failed to load config from %v, err: %v\n", *configFilePath, err)
 	}
+
 	// 1. 初始化
 	// 1.1 日志
 	if err := utils.InitLogger(); err != nil {
@@ -48,10 +49,14 @@ func main() {
 		if err := models.DB.Close(); err != nil {
 			utils.Logger.Fatalw("Failed to close database clearly.", zap.String("Error", err.Error()))
 		}
+		if err := models.GeoDB.Close(); err != nil {
+			utils.Logger.Fatalw("Failed to close geoip2 database clearly.", zap.String("Error", err.Error()))
+		}
 		if err := utils.Logger.Sync(); err != nil {
 			log.Fatalf("Failed to close logger clearly, err: %v\n", err)
 		}
 	}()
+
 	// 1.4 HTTP服务
 	routers.Init()
 	utils.Logger.Debugw("Succeed to initiate router.")
