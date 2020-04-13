@@ -34,8 +34,8 @@ func IsInternal(ip string) bool {
 	return n>>24 == a || n>>20 == b || n>>16 == c
 }
 
-// GetExternalIP 获取公网IP
-func GetExternalIP() (string, error) {
+// GetExternalIPByHTTP 获取公网IP
+func GetExternalIPByHTTP() (string, error) {
 	res, err := http.Get("http://whatismyip.akamai.com/")
 	if err != nil {
 		return "", err
@@ -46,4 +46,19 @@ func GetExternalIP() (string, error) {
 		return "", err
 	}
 	return string(content), nil
+}
+
+// GetExternalIPByDNS 获取公网IP
+func GetExternalIPByDNS() (string, error) {
+	conn, err := net.Dial("tcp", "ns1.dnspod.net:6666")
+	if err != nil {
+		return "", err
+	}
+	defer conn.Close()
+	var ip [15]byte
+	n, err := conn.Read(ip[:])
+	if err != nil {
+		return "", err
+	}
+	return string(ip[:n]), nil
 }

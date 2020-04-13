@@ -38,6 +38,7 @@ func Init() {
 	// >>>>>>>>>>>
 	// 这里是中间件
 	// <<<<<<<<<<<
+	// GEngine.Use(gin.Recovery())
 	GEngine.Use(gin.Logger(), gin.Recovery())
 	GEngine.Use(middlewares.Logger(), sessions.Sessions(utils.Config.Session.Key, utils.NewCookieSessions(utils.Config.Session.Secret)))
 	// >>>>>>>>>
@@ -68,8 +69,8 @@ func Init() {
 	apiv1 := GEngine.Group("/api/v1")
 	{
 		apiv1.GET("/captcha", v1.GetCaptcha)
-		apiv1.POST("/attackmapdata", v1.GetAttackMapData)
-		apiv1.POST("/attackmapctr", v1.GetAttackMapCtr)
+		apiv1.GET("/attackmapdata", v1.GetAttackMapData)
+		apiv1.GET("/attackmapctr", v1.GetAttackMapCtr)
 	}
 	// >>>>>>>>>
 	// 这里是404

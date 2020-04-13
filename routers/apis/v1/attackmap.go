@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/likiiiiii/foxpot_backend/models"
 	"github.com/likiiiiii/foxpot_backend/utils"
@@ -12,6 +13,7 @@ import (
 
 // GetAttackMapData 给球数据
 func GetAttackMapData(c *gin.Context) {
+	session := sessions.Default(c)
 	sr, err := models.GetAllTypeData(context.Background())
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -37,15 +39,21 @@ func GetAttackMapData(c *gin.Context) {
 		}
 		// 源IP
 		if utils.IsInternal(datum.SrcIP) {
-			// TODO 修改查询公网IP方式 这种延迟太大 考虑缓存
-			datum.SrcIP, err = utils.GetExternalIP()
-			if err != nil {
-				c.JSON(http.StatusInternalServerError, gin.H{
-					"code":    200,
-					"message": "查询公网ip失败",
-					"data":    datum,
-				})
-				return
+			// TODO 修改查询公网IP方式 这种延迟太大 考虑缓存 先存到session里吧
+			if extIP, ok := session.Get("ext_ip").(string); ok {
+				datum.SrcIP = extIP
+			} else {
+				extIP, err = utils.GetExternalIPByHTTP()
+				if err != nil {
+					c.JSON(http.StatusInternalServerError, gin.H{
+						"code":    200,
+						"message": "查询公网ip失败",
+						"data":    datum,
+					})
+					return
+				}
+				session.Set("ext_ip", extIP)
+				datum.SrcIP = extIP
 			}
 		}
 		srcInfo, err := models.GetGeoIP2Info(datum.SrcIP)
@@ -53,20 +61,27 @@ func GetAttackMapData(c *gin.Context) {
 			datum.SrcLat = 0.0
 			datum.SrcLng = 0.0
 			datum.SrcRegion = "未知"
+		} else {
+			datum.SrcLat = srcInfo.Latitude
+			datum.SrcLng = srcInfo.Longitude
+			datum.SrcRegion = srcInfo.Region
 		}
-		datum.SrcLat = srcInfo.Latitude
-		datum.SrcLng = srcInfo.Longitude
-		datum.SrcRegion = srcInfo.Region
 		// 目的IP
 		if utils.IsInternal(datum.DstIP) {
-			datum.DstIP, err = utils.GetExternalIP()
-			if err != nil {
-				c.JSON(http.StatusInternalServerError, gin.H{
-					"code":    200,
-					"message": "查询公网ip失败",
-					"data":    datum,
-				})
-				return
+			if extIP, ok := session.Get("ext_ip").(string); ok {
+				datum.DstIP = extIP
+			} else {
+				extIP, err = utils.GetExternalIPByHTTP()
+				if err != nil {
+					c.JSON(http.StatusInternalServerError, gin.H{
+						"code":    200,
+						"message": "查询公网ip失败",
+						"data":    datum,
+					})
+					return
+				}
+				session.Set("ext_ip", extIP)
+				datum.DstIP = extIP
 			}
 		}
 		dstInfo, err := models.GetGeoIP2Info(datum.DstIP)
@@ -74,10 +89,11 @@ func GetAttackMapData(c *gin.Context) {
 			datum.DstLat = 0.0
 			datum.DstLng = 0.0
 			datum.DstRegion = "未知"
+		} else {
+			datum.DstLat = dstInfo.Latitude
+			datum.DstLng = dstInfo.Longitude
+			datum.DstRegion = dstInfo.Region
 		}
-		datum.DstLat = dstInfo.Latitude
-		datum.DstLng = dstInfo.Longitude
-		datum.DstRegion = dstInfo.Region
 		data = append(data, datum)
 	}
 	c.JSON(200, gin.H{
