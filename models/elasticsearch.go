@@ -14,6 +14,7 @@ func GetAllTypeData(ctx context.Context) (*elastic.SearchResult, error) {
 		Query(elastic.NewRangeQuery("@timestamp").
 			Gte("now-1m").
 			Lte("now")).
+		Size(10000).
 		Do(ctx)
 }
 
