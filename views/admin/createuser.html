@@ -1,84 +1,76 @@
-{{ define "admin/createuser.html"}}
-<!DOCTYPE html>
-<html>
+{{ define "admin/createuser" }}
+{{ template "head" . }}
+<div class="main-panel">
+    <div class="content">
+        <div class="panel-header bg-primary-gradient">
+            <div class="page-inner py-5">
+                <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
+                    <div>
+                        <h2 class="text-white pb-2 fw-bold">用户创建</h2>
+                    </div>
 
-<head>
-    <link rel="stylesheet" href="/statics/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/statics/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/statics/css/adminlte.min.css">
-    <link rel="stylesheet" href="/statics/css/square/square.css">
-    <script type="text/javascript" src="/statics/js/jquery-3.4.1.min.js"></script>
-    <script type="text/javascript" src="/statics/js/popper.min.js"></script>
-    <script type="text/javascript" src="/statics/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/statics/js/adminlte.min.js"></script>
-    <script type="text/javascript" src="/statics/js/icheck.min.js"></script>
-    <style>
-        body {
-            font-family: Segoe UI;
-        }
-
-        .action {
-            padding: 10px;
-            box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
-        }
-
-        .action .btn {
-            margin-left: 10px;
-            padding: 5px 8px;
-            font-size: 14px;
-            line-height: 1.5;
-        }
-    </style>
-</head>
-
-<body>
-    <div class="box">
-        <form id="_form" action="/admin/createuser" method="POST" autocomplete="off">
-            <div class="action">
-                <span>
-                    <button class="btn btn-sm btn-default" type="submit"><i class="fa fa-share-square"></i>&nbsp;&nbsp;提交</button>
-                    <button class="btn btn-sm btn-default" type="reset"><i class="fa fa-undo"></i>&nbsp;&nbsp;重置</button>
-                    <a data-src="usermanage" class="btn btn-sm btn-primary grid-refresh" style="color: #fff;"><i class="fa fa-arrow-left"></i>&nbsp;返回</a>
-                    {{ if .message }}
-                    <a class="text-danger" style="padding-left: 10px;vertical-align: middle;">{{ .message }}</a>
-                    {{end}}
-                </span>
-            </div>
-            <div class="box-body">
-                <div>
-                    <label>用户名</label>
-                    <input type="text" name="username" required>
-                </div>
-                <div>
-                    <label>权限</label>
-                    <select name="role" required>
-                        <option value="user">普通用户</option>
-                        <option value="admin">管理员</option>
-                    </select>
-                </div>
-                <div>
-                    <label>邮箱</label>
-                    <input type="email" name="email">
-                </div>
-                <div>
-                    <label>手机</label>
-                    <input type="number" name="phone" >
-                </div>
-                <div>
-                    <label>密码</label>
-                    <input type="text" name="password" required>
                 </div>
             </div>
-        </form>
+        </div>
+        <div class="page-inner mt--5 ">
+            <div class="card mt--2">
+                <div class="card-body">
+
+                    <form action="/admin/createuser" method="POST" autocomplete="off">
+                        <div class="row mt-5">
+                            <div class="offset-md-1 col-md-5">
+                                <div class="form-group center-block">
+                                    <label class="font-black">用户名</label>
+                                    <input type="text" class="form-control" name="username" placeholder="用户名" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password" class="font-black">密码</label>
+                                    <input type="password" class="form-control" name="password" placeholder="密码"
+                                        required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password" class="font-black">确认密码</label>
+                                    <input type="password" class="form-control" name="confirm" placeholder="确认密码"
+                                        required>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label for="role" class="font-black">使用权限</label>
+                                    <select class="form-control" name="role" required>
+                                        <option value="user">普通用户</option>
+                                        <option value="admin">管理员</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email" class="font-black">邮箱</label>
+                                    <input type="email" class="form-control" name="email" placeholder="xxx@xxx.com">
+                                </div>
+                                <div class="form-group">
+                                    <label for="text" class="font-black">手机号</label>
+                                    <input type="text" class="form-control" name="phone" placeholder="手机号">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="offset-md-9 card-action">
+                                <button class="btn btn-sm btn-default " type="submit"><i
+                                        class="fa fa-check-square"></i>&nbsp;&nbsp;新建</button>
+                                <button class="btn btn-sm btn-secondary " type="reset"><i
+                                        class="fa fa-refresh"></i>&nbsp;&nbsp;重置</button>
+                                <button class="btn btn-sm btn-default " onclick="location.href='usermanage'"><i
+                                        class="fas fa-arrow-left"></i>&nbsp;&nbsp;返回</button>
+                            </div>
+                            <!-- <input type="submit" class="btn-secondary btn-round btn-submit mt-4" value="注册"> -->
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-    <script>
-        $(function(){
-            $(".action span a").on("click", function(){
-                window.parent.document.getElementsByTagName("iframe")[0].src = $(this).attr("data-src")
-            });
-        });
-    </script>
-</body>
-
-</html>
-{{ end }}
+    {{ if .message }}
+    <div style="display:none;" id="getmessage">{{ .message }}</div>
+    <script>alert(document.getElementById("getmessage").innerHTML)</script>
+    {{end}}
+    {{ template "footer" }}
+    {{ end }}

@@ -1,0 +1,11 @@
+{{ define "admin/eshead" }}
+{{ template "head" . }}
+<div class="main-panel mt-60">
+    <iframe id="iframe" height="100%" width="100%"></iframe>
+    <script>
+        // src = "https://*.*.*.*:64302/"
+        document.getElementById("iframe").setAttribute("src", "https://" + window.location.host.split(":")[0] + ":64302")
+    </script>
+</div>
+{{ template "footer" }}
+{{ end }}

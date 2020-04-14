@@ -11,15 +11,48 @@ type User struct {
 	LastLoginAt    time.Time
 	Username       string
 	HashedPassword string
-	Role           string
-	AvatarURL      string
+	Role           uint
 	Email          string
 	Phone          string
 }
 
+// HasAnyAdminByUsernames 是否包含管理员
+func HasAnyAdminByUsernames(usernames []string) bool {
+	for _, username := range usernames {
+		if user, err := GetUserByUsername(username); err != nil && user.IsAdmin() {
+			return true
+		}
+	}
+	return false
+}
+
+// Role2Str 权限转文本
+func Role2Str(role uint) string {
+	switch {
+	case role == 0:
+		return "超级管理员"
+	case role == 1:
+		return "管理员"
+	default:
+		return "普通用户"
+	}
+}
+
+// Role2Uint 权限转数字
+func Role2Uint(role string) uint {
+	switch {
+	case role == "超级管理员":
+		return uint(0)
+	case role == "管理员":
+		return uint(1)
+	default:
+		return uint(2)
+	}
+}
+
 // IsAdmin 是否是管理员
 func (u *User) IsAdmin() bool {
-	return u.Role == "admin"
+	return u.Role < 2
 }
 
 // CreateUser 新增用户
@@ -39,7 +72,7 @@ func DeleteUserByUsername(userName string) error {
 
 // UpdateUser 更新用户
 func UpdateUser(user *User) error {
-	return DB.Save(user).Error
+	return DB.Model(&User{}).Update(user).Error
 }
 
 // GetUserByUsername 通过用户名获取用户

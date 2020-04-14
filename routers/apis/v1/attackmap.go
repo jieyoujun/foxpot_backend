@@ -18,28 +18,28 @@ func GetAttackMapData(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"code":    200,
-			"message": "查询失败",
-			"data":    "",
+			"message": "攻击地图数据查询失败",
 		})
 		return
 	}
 	var (
-		data  []models.AttackMapDataResponse
-		datum models.AttackMapDataResponse
+		data  []models.AttackMapData
+		datum models.AttackMapData
 	)
 	for _, hit := range sr.Hits.Hits {
 		err := json.Unmarshal(hit.Source, &datum)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
 				"code":    200,
-				"message": "解析失败",
+				"message": "反序列化失败",
 				"data":    datum,
 			})
 			return
 		}
 		// 源IP
 		if utils.IsInternal(datum.SrcIP) {
-			// TODO 修改查询公网IP方式 这种延迟太大 考虑缓存 先存到session里吧
+			// TODO
+			// 优化查询公网IP速度, 考虑缓存, 先放到session
 			if extIP, ok := session.Get("ext_ip").(string); ok {
 				datum.SrcIP = extIP
 			} else {
@@ -47,7 +47,7 @@ func GetAttackMapData(c *gin.Context) {
 				if err != nil {
 					c.JSON(http.StatusInternalServerError, gin.H{
 						"code":    200,
-						"message": "查询公网ip失败",
+						"message": "公网IP查询失败",
 						"data":    datum,
 					})
 					return
@@ -75,7 +75,7 @@ func GetAttackMapData(c *gin.Context) {
 				if err != nil {
 					c.JSON(http.StatusInternalServerError, gin.H{
 						"code":    200,
-						"message": "查询公网ip失败",
+						"message": "公网IP查询失败",
 						"data":    datum,
 					})
 					return
@@ -96,9 +96,9 @@ func GetAttackMapData(c *gin.Context) {
 		}
 		data = append(data, datum)
 	}
-	c.JSON(200, gin.H{
+	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
-		"message": "成功",
+		"message": "攻击地图数据查询成功",
 		"data":    data,
 	})
 }
@@ -109,8 +109,7 @@ func GetAttackMapCtr(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"code":    200,
-			"message": "查询失败",
-			"data":    "",
+			"message": "攻击地图统计数据查询失败",
 		})
 		return
 	}
@@ -132,7 +131,7 @@ func GetAttackMapCtr(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"code":    200,
-			"message": "序列化失败",
+			"message": "攻击地图统计数据序列化失败",
 			"data":    sr.Aggregations,
 		})
 		return
@@ -141,14 +140,14 @@ func GetAttackMapCtr(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"code":    200,
-			"message": "解析失败",
+			"message": "攻击地图统计数据反序列化失败",
 			"data":    string(bs),
 		})
 		return
 	}
-	var ctr []models.AttackMapCtrResponse
+	var ctr []models.AttackMapCtr
 	for _, b := range ar.CtrAllTime.Buckets {
-		ctr = append(ctr, models.AttackMapCtrResponse{
+		ctr = append(ctr, models.AttackMapCtr{
 			SourceType: b.Key,
 			CtrAllTime: b.Count,
 			Ctr7d:      b.CtrSmallerTime.Buckets[0].Count,
@@ -157,9 +156,9 @@ func GetAttackMapCtr(c *gin.Context) {
 			Ctr1m:      b.CtrSmallerTime.Buckets[3].Count,
 		})
 	}
-	c.JSON(200, gin.H{
+	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
-		"message": "成功",
+		"message": "攻击地图统计数据查询成功",
 		"data":    ctr,
 	})
 }

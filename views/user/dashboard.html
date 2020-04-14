@@ -1,0 +1,12 @@
+{{ define "user/dashboard" }}
+{{ template "user/head" . }}
+<div class="main-panel mt-60">
+    <iframe id="iframe" height="100%" width="100%"></iframe>
+    <script>
+        // src="https://*.*.*.*:64296/" 
+        // document.getElementById("iframe").setAttribute("src", "https://" + window.location.host.split(":")[0] + ":64296/")
+        document.getElementById("iframe").setAttribute("src", "https://" + window.location.host.split(":")[0] + ":64296/app/kibana#/dashboard/19c80990-79ab-11ea-9392-0f23b7dc0e45?embed=true&_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-24h,to:now))&_a=(description:'',filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'5687d970-70d5-11ea-aa01-63683a999fa4',key:src_ip.keyword,negate:!f,params:(query:'192.168.88.1'),type:phrase),query:(match:(src_ip.keyword:(query:'192.168.88.1',type:phrase))))),fullScreenMode:!f,options:(hidePanelTitles:!f,useMargins:!t),panels:!((embeddableConfig:(),gridData:(h:10,i:ad188863-c407-4a32-9ebb-9f4b2dcd0fd6,w:24,x:0,y:0),id:ca60dd30-79a2-11ea-9392-0f23b7dc0e45,panelIndex:ad188863-c407-4a32-9ebb-9f4b2dcd0fd6,type:visualization,version:'7.5.2'),(embeddableConfig:(),gridData:(h:10,i:a6af5602-8b4b-4226-a5d5-e258ead766de,w:24,x:24,y:0),id:'6569ee60-79a4-11ea-9392-0f23b7dc0e45',panelIndex:a6af5602-8b4b-4226-a5d5-e258ead766de,type:visualization,version:'7.5.2'),(embeddableConfig:(),gridData:(h:11,i:'8658ec09-1c58-4f27-b20e-493bd8fdcba8',w:24,x:0,y:10),id:'4a60da80-7999-11ea-9392-0f23b7dc0e45',panelIndex:'8658ec09-1c58-4f27-b20e-493bd8fdcba8',type:visualization,version:'7.5.2'),(embeddableConfig:(),gridData:(h:11,i:'8a7a99be-7248-450e-8a52-f99afd3ee250',w:12,x:24,y:10),id:'464173f0-79a9-11ea-9392-0f23b7dc0e45',panelIndex:'8a7a99be-7248-450e-8a52-f99afd3ee250',type:visualization,version:'7.5.2'),(embeddableConfig:(),gridData:(h:11,i:cd69b28a-3be5-46d0-b190-026a60dc42e5,w:12,x:36,y:10),id:'05cbd5e0-79a9-11ea-9392-0f23b7dc0e45',panelIndex:cd69b28a-3be5-46d0-b190-026a60dc42e5,type:visualization,version:'7.5.2')),query:(language:kuery,query:''),timeRestore:!f,title:test1,viewMode:view)")
+    </script>
+</div>
+{{ template "user/footer" }}
+{{ end }}

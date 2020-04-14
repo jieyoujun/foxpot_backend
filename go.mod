@@ -17,7 +17,7 @@ require (
 	github.com/shurcooL/sanitized_anchor_name v1.0.0 // indirect
 	github.com/smartystreets/assertions v1.0.1 // indirect
 	github.com/smartystreets/goconvey v1.6.4 // indirect
-	github.com/wangsongyan/wblog v0.0.0-20190212134921-875ef9a6cda0 // indirect
+	github.com/wangsongyan/wblog v0.0.0-20190212134921-875ef9a6cda0
 	go.etcd.io/etcd v3.3.18+incompatible
 	go.uber.org/zap v1.14.0
 	golang.org/x/crypto v0.0.0-20191205180655-e7c4368fe9dd

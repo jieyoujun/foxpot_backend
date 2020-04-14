@@ -7,7 +7,7 @@ import (
 	"github.com/olivere/elastic/v7"
 )
 
-// GetAllTypeData 获取最近1分钟所有数据
+// GetAllTypeData 获取最近1分钟所有类型数据
 func GetAllTypeData(ctx context.Context) (*elastic.SearchResult, error) {
 	return ESCli.Search().
 		Index(utils.Config.ES.IndexName).
@@ -18,7 +18,7 @@ func GetAllTypeData(ctx context.Context) (*elastic.SearchResult, error) {
 		Do(ctx)
 }
 
-// GetAllTypeCtr 获取所有数据的统计数据
+// GetAllTypeCtr 获取所有类型数据的统计数据
 func GetAllTypeCtr(ctx context.Context) (*elastic.SearchResult, error) {
 	return ESCli.Search().
 		Index(utils.Config.ES.IndexName).

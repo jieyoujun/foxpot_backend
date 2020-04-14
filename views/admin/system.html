@@ -1,0 +1,11 @@
+{{ define "admin/system" }}
+{{ template "head" . }}
+<div class="main-panel mt-60">
+    <iframe id="iframe" height="100%" width="100%"></iframe>
+    <script>
+        // src = "https://*.*.*.*:61204/cockpit/@localhost/docker/index.html"
+        document.getElementById("iframe").setAttribute("src", "https://" + window.location.host.split(":")[0] + ":61204/cockpit/@localhost/system/index.html")
+    </script>
+</div>
+{{ template "footer" }}
+{{ end }}

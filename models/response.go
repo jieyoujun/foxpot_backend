@@ -7,10 +7,10 @@ type JSONResponse struct {
 	Data    interface{} `json:"data,omitempty"`
 }
 
-// AttackMapDataResponse 给球的数据格式
-type AttackMapDataResponse struct {
+// AttackMapData 攻击地图数据
+type AttackMapData struct {
 	SourceType string `json:"type"`
-	EventType  string `json:"event_type"`
+	EventType  string `json:"event_type,omitempty"`
 	TimeStamp  string `json:"@timestamp"`
 
 	SrcIP     string  `json:"src_ip"`
@@ -24,8 +24,8 @@ type AttackMapDataResponse struct {
 	DstRegion string  `json:"dest_reg"`
 }
 
-// AttackMapCtrResponse 给球的统计格式
-type AttackMapCtrResponse struct {
+// AttackMapCtr 攻击地图统计数据
+type AttackMapCtr struct {
 	SourceType string `json:"type"`
 	CtrAllTime int    `json:"all_time"`
 	Ctr7d      int    `json:"7d"`

@@ -29,6 +29,16 @@ func Init() {
 				return timeString
 			}
 		},
+		"role2Str": func(role uint) string {
+			switch {
+			case role == 0:
+				return "超级管理员"
+			case role == 1:
+				return "管理员"
+			default:
+				return "普通用户"
+			}
+		},
 	})
 	// 1.4.2 注册模板文件
 	GEngine.LoadHTMLGlob("views/**/*")
@@ -54,17 +64,36 @@ func Init() {
 	admin := GEngine.Group("/admin", middlewares.AdminRequired())
 	{
 		admin.GET("/", views.GetAdminIndex)
-		admin.GET("/profile", views.GetAdminProfile)
+		// 个人中心
+		admin.GET("profile", views.GetAdminProfile)
+		admin.GET("/updateprofile", views.GetAdminUpdateProfile)
+		admin.POST("updateprofile", views.PostAdminUpdateProfile)
+		// 用户管理
 		admin.GET("/usermanage", views.GetAdminUserManage)
 		admin.GET("/createuser", views.GetAdminCreateUser)
 		admin.POST("/createuser", views.PostAdminCreateUser)
 		admin.POST("/deleteuser", views.PostAdminDeleteUser)
 		admin.GET("/updateuser", views.GetAdminUpdateUser)
 		admin.POST("/updateuser", views.PostAdminUpdateUser)
+		// 组件
+		admin.GET("/eshead", views.GetAdminESHead)
+		admin.GET("/discover", views.GetAdminKibanaDiscover)
+		admin.GET("/dashboard", views.GetAdminKibanaDashboard)
+		admin.GET("/docker", views.GetAdminCockpitDocker)
+		admin.GET("/system", views.GetAdminCockpitSystem)
+		admin.GET("/terminal", views.GetAdminCockpitTerminal)
 	}
 	user := GEngine.Group("/user", middlewares.UserRequired())
 	{
 		user.GET("/", views.GetUserIndex)
+		// 个人中心
+		user.GET("/profile", views.GetUserProfile)
+		user.GET("/updateprofile", views.GetUserUpdateProfile)
+		user.POST("/updateprofile", views.PostUserUpdateProfile)
+		// 组件
+		user.GET("/discover", views.GetUserKibanaDiscover)
+		user.GET("/dashboard", views.GetUserKibanaDashboard)
+		user.GET("/system", views.GetUserCockpitSystem)
 	}
 	apiv1 := GEngine.Group("/api/v1")
 	{

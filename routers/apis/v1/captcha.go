@@ -7,9 +7,7 @@ import (
 )
 
 // TODO
-// 支持ES查询
-// 攻击事件给到攻击地图
-// ...
+// 添加验证码过期时间
 
 // GetCaptcha 验证码
 func GetCaptcha(c *gin.Context) {

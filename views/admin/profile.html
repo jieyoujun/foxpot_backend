@@ -1,16 +1,83 @@
-{{ define "admin/profile.html"}}
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>{{ .title }} - 猎狐蜜罐</title>
-        <link rel="stylesheet" href="/statics/css/my.css">
-    </head>
-    <body>
-        <h1>Welcome to index page!</h1>
-        {{ with .User }}
-        <h2>I am {{ .Username }}, my password is {{ .HashedPassword }}</h2>
-        {{ end }}
-        <a href="/logout">退出登录</a>
-    </body>
-</html>
-{{ end }}
+{{ define "admin/profile" }}
+{{ template "head" . }}
+<style>
+    .form-control:disabled,.form-control[readonly]{
+        opacity: 1 !important;
+    }
+    .form-control:disabled, .form-control[readonly]{
+            background: #ffffff !important;
+    }
+
+</style>
+<div class="main-panel">
+    <div class="content">
+        <div class="panel-header bg-primary-gradient">
+            <div class="page-inner py-5">
+                <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
+                    <div>
+                        <h2 class="text-white pb-2 fw-bold">个人中心</h2>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="page-inner mt--5 ">
+            <div class="card mt--2">
+                <div class="card-body">
+                    {{ with .user }}
+                    <div class="row mt-5">
+                        <div class="offset-md-1 col-md-5">
+                            <div class="form-group center-block">
+                                <label class="font-black">用户名</label>
+                                <input type="text" class="form-control" placeholder="{{ .Username }}"
+                                    disabled="disabled">
+                            </div>
+                            <div class="form-group">
+                                <label for="role" class="font-black">使用权限</label>
+                                <input type="text" class="form-control" placeholder="{{ .Role | role2Str }}" disabled="disabled">
+                            </div>
+                            <div class="form-group">
+                                <label for="email" class="font-black">邮箱</label>
+                                {{ if .Email }}
+                                <input type="text" class="form-control" placeholder="{{ .Email }}" disabled="disabled">
+                                {{ else }}
+                                <input type="text" class="form-control" placeholder="本用户很懒，并没有设置邮箱" disabled="disabled">
+                                {{ end }}
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label for="text" class="font-black">手机号</label>
+                                {{ if .Phone }}
+                                <input type="text" class="form-control" placeholder="{{ .Phone }}" disabled="disabled">
+                                {{ else }}
+                                <input type="text" class="form-control" placeholder="本用户很懒，并没有设置手机号"
+                                    disabled="disabled">
+                                {{ end }}
+                            </div>
+                            <div class="form-group">
+                                <label class="font-black">创建时间</label>
+                                <input type="text" class="form-control" id="id" placeholder="{{ .CreatedAt }}" disabled="disabled">
+                            </div>
+                            <div class="form-group">
+                                <label class="font-black">最近登录时间</label>
+                                <input type="text" class="form-control" placeholder="{{ .LastLoginAt }}"
+                                    disabled="disabled">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="offset-md-9 card-action">
+                            <a href="/admin/updateprofile" class="btn btn-sm btn-default"><i
+                                    class="fa fa-check-square"></i>&nbsp;&nbsp;编辑个人信息</a>
+
+                        </div>
+                        <!-- <input type="submit" class="btn-secondary btn-round btn-submit mt-4" value="注册"> -->
+                    </div>
+                    {{ end }}
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ template "footer" }}
+    {{ end }}

@@ -19,8 +19,7 @@ func UserRequired() gin.HandlerFunc {
 				return
 			}
 			c.HTML(http.StatusForbidden, "error.html", gin.H{
-				"code":    403,
-				"message": "不许偷看",
+				"message": "越权访问",
 				"title":   "错误",
 			})
 			c.Abort()
@@ -40,8 +39,7 @@ func AdminRequired() gin.HandlerFunc {
 				return
 			}
 			c.HTML(http.StatusForbidden, "error.html", gin.H{
-				"code":    403,
-				"message": "不许偷看",
+				"message": "越权访问",
 				"title":   "错误",
 			})
 			c.Abort()

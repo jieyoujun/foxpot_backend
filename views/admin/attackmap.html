@@ -1,0 +1,81 @@
+{{define "admin/attackmap"}}
+{{template "head" .}}
+
+<div class="main-panel">
+    <div class="content">
+        <div class="page-inner bg-primary-gradient">
+            <div class="row">
+                <div class="col-3">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
+                                <div class="card" style="width: 23rem;">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item big">53632</li>
+                                        <li class="list-group-item small">attack during last time</li>
+                                        <li class="list-group-item middle">3045874 attacks in 1h</li>
+                                        <li class="list-group-item middle">81234455 attacks in 24h</li>
+                                    </ul>
+                                </div>
+                                <!-- <div>
+
+                                    <h1 class="pb-2 fw-bold">53632</h1>
+                                    <h5 class="op-7 mb-2">attack during last time</h5>
+                                    <h4 class="mb-2">3045874 attacks in 1h</h5>
+                                        <h4 class="mb-2">81234455 attacks in 24h</h5>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row country">
+                        <div class="col-12 mt-3">
+
+                            <div class="card bg-country card-country">
+                                <div class="card-header">
+                                    <h4 class="card-title" id="attackCountry"></h4>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="specification-list" id="attackCountryNum">
+                                        <!-- <li>
+                                            <span class="name-specification">攻击次数</span>
+                                            <span class="status-specification">0</span>
+                                        </li>
+                                        <li>
+                                            <span class="name-specification">被攻击次数</span>
+                                            <span class="status-specification">0</span>
+                                        </li> -->
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-9">
+                    <div id="map" style="height:75%;box-sizing: border-box;"></div>
+                    <script>
+                        // document.addEventListener("mousewheel", function (e) {
+                        //     $(document).unbind('mousewheel')
+                        // })
+                        
+                        document.getElementById("map").onmousewheel=function(){
+                            return false
+                            
+                        }
+                    </script>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+</div>
+
+</div>
+</div>
+{{template "footer"}}
+{{end}}

@@ -1,192 +1,217 @@
-{{ define "admin/usermanage.html"}}
-<!DOCTYPE html>
-<html>
-    <head>
-        <link rel="stylesheet" href="/statics/css/bootstrap.min.css">
-        <link rel="stylesheet" href="/statics/css/font-awesome.min.css">
-        <link rel="stylesheet" href="/statics/css/adminlte.min.css">
-        <link rel="stylesheet" href="/statics/css/square/square.css">
-        <script type="text/javascript" src="/statics/js/jquery-3.4.1.min.js"></script>
-        <script type="text/javascript" src="/statics/js/popper.min.js"></script>
-        <script type="text/javascript" src="/statics/js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="/statics/js/adminlte.min.js"></script>
-        <script type="text/javascript" src="/statics/js/icheck.min.js"></script>
-        <style>
-            body {
-               font-family: Segoe UI;
-            }
-            .action {
-                padding: 10px;
-                box-shadow: 0 1px 1px rgba(0,0,0,.1);
-            }
-            .action .btn {
-                margin-left: 10px;
-                padding: 5px 8px;
-                font-size: 14px;
-                line-height: 1.5;
-            }
-            
-            .box table {
-                width: 100%;
-            }
-
-            table>tbody>tr>th {
-                background-color: #fafafa;
-                border-bottom: 1px solid #ccc;
-                word-break: keep-all;
-            }
-
-            .table td, .table th {
-                padding: .75rem;
-                vertical-align: middle;
-                border-top: 1px solid #dee2e6;
-                text-align: center;
-            }
-            
-        </style>
-    </head>
-    <body>
-        <div class="box">
-            {{ if not .Users }}
-            <h2>错误</h2>
-            {{ else }}
-            <div class="action">
-                <span>
-                    <a data-src="createuser" class="btn btn-sm btn-default"><i class="fa fa-plus"></i>&nbsp;&nbsp;新建</a>
-                    <button class="btn btn-sm btn-default" id="mydelete"><i class="fa fa-trash"></i>&nbsp;&nbsp;删除</button>
-                    <button class="btn btn-sm btn-default" id="myupdate"><i class="fa fa-edit"></i>&nbsp;&nbsp;编辑</button>
-                    <a data-src="usermanage" class="btn btn-sm btn-primary grid-refresh" style="color: #fff;"><i class="fa fa-refresh"></i>&nbsp;刷新</a>
-                </span>
+{{ define "admin/usermanage"}}
+{{template "head" .}}
+<link rel="stylesheet" href="/statics/css/square/square.css">
+<script type="text/javascript" src="/statics/js/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="/statics/js/popper.min.js"></script>
+<script type="text/javascript" src="/statics/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/statics/js/adminlte.min.js"></script>
+<script type="text/javascript" src="/statics/js/icheck.min.js"></script>
+<div class="main-panel">
+    <div class="content">
+        <div class="panel-header bg-primary-gradient">
+            <div class="page-inner py-5">
+                <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
+                    <div>
+                        <h2 class="text-white pb-2 fw-bold">用户管理</h2>
+                    </div>
+                </div>
             </div>
-            <table class="table table-hover">
-                <tbody>
-                    <tr>
-                        <th>
-                            <input type="checkbox" class="select-all">
-                        </th>
-                        <th>No.</th>
-                        <th>用户名</th>
-                        <th>权限</th>
-                        <th>邮箱</th>
-                        <th>手机</th>
-                        <th>创建时间</th>
-                        <th>最近登录时间</th>
-                    </tr>
-                    {{ range $idx, $user := .Users }}
-                    <tr>
-                        <td style="text-align: center;">
-                            <input type="checkbox" class="select-one" data-username="{{$user.Username}}">
-                        </td>
-                        <td>
-                            {{ $idx | autoincrement }}
-                        </td>
-                        <td>
-                            {{ $user.Username }}
-                        </td>
-                        <td>
-                            {{ $user.Role }}
-                        </td>
-                        <td>
-                            {{ $user.Email }}
-                        </td>
-                        <td>
-                            {{ $user.Phone }}
-                        </td>
-                        <td>
-                            {{ $user.CreatedAt.Format "2006/01/02 15:04:05" }}
-                        </td>
-                        <td>
-                            {{ $user.LastLoginAt.Format "2006/01/02 15:04:05" | timeBeautifier }}
-                        </td>
-                    </tr>
-                    {{ end }}
-                </tbody>
-            </table>
-            <!-- TODO -->
-            <!-- 分页 -->
-            {{ end }}
         </div>
-        <script>
-            // TODO 可以把 delete和update函数精简合并下 都有收集checked的username部分
-            $('#myupdate').click(function() {
-                let usernames = [];
-                $('.select-one:checked').each(function () {
-                    usernames.push($(this).data('username').toString());
-                });
-                if (usernames.length > 0 ) {
-                    window.parent.document.getElementsByTagName("iframe")[0].src = "updateuser?username="+usernames[0];
-                } else {
-                    alert("请宁乖");
+
+        <div class="page-inner mt--5 ">
+            <div class="card mt--2">
+                <div class="card-body">
+                    {{ if .message }}
+                    <a class="text-danger" style="padding-left: 10px;vertical-align: middle;">{{ .message }}</a>
+                    {{end}}
+                    <table class="table table-hover font-black">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <input type="checkbox" class="select-all">
+                                </th>
+                                <th>No.</th>
+                                <th>用户名</th>
+                                <th>权限</th>
+                                <th>邮箱</th>
+                                <th>手机</th>
+                                <th>创建时间</th>
+                                <th>最近登录时间</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+
+                            {{ range $idx, $user := .users }}
+                            <tr>
+                                <td>
+                                    <input type="checkbox" class="select-one" data-username="{{$user.Username}}" data-role="{{$user.Role}}">
+                                </td>
+                                <td>
+                                    {{ $idx | autoincrement }}
+                                </td>
+                                <td>
+                                    {{ $user.Username }}
+                                </td>
+                                <td>
+                                    {{ $user.Role | role2Str }}
+                                </td>
+                                <td>
+                                    {{ $user.Email }}
+                                </td>
+                                <td>
+                                    {{ $user.Phone }}
+                                </td>
+                                <td>
+                                    {{ $user.CreatedAt.Format "2006/01/02 15:04:05" }}
+                                </td>
+                                <td>
+                                    {{ $user.LastLoginAt.Format "2006/01/02 15:04:05" | timeBeautifier }}
+                                </td>
+                            </tr>
+                            {{ end }}
+                        </tbody>
+
+                    </table>
+                    <div class="row">
+                        <div class="action offset-md-9 mt-4">
+                            <span>
+                                <a href="createuser" class="btn btn-sm btn-default"><i
+                                        class="fa fa-plus"></i>&nbsp;&nbsp;新建</a>
+                                <button class="btn btn-sm btn-default" id="mydelete"><i
+                                        class="fa fa-trash"></i>&nbsp;&nbsp;删除</button>
+                                <button class="btn btn-sm btn-default" id="myupdate"><i
+                                        class="fa fa-edit"></i>&nbsp;&nbsp;编辑</button>
+                                <a href="usermanage" class="btn btn-sm btn-primary grid-refresh" style="color: #fff;"><i
+                                        class="fa fa-refresh"></i>&nbsp;刷新</a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var userData = null;//获取当前用户
+        $.ajax({
+            type: "Get",
+            url: "/admin/userData",
+            async: false,
+            success: function (response) {
+                userData = response.User;
+            }
+        })
+        // TODO 可以把 delete和update函数精简合并下 都有收集checked的username部分
+        $('#myupdate').click(function () {
+            let usernames = [];
+            let roles = [];
+            $('.select-one:checked').each(function () {
+                usernames.push($(this).data('username').toString());
+                roles.push($(this).data('role').toString());
+            });
+            if (usernames.length > 0) {//如果选中了一个或多个
+                if(usernames.length > 1){//如果选中了多个
+                    alert("您只能选择一个对象进行编辑");
+                }else{//如果选中了一个
+                    if(userData.Username=="liki"){//如果是超管进行操作，那么都可以进行修改
+                        window.location.href = '/admin/edit/' + usernames[0]
+                    }
+                    else{//如果不是超管，那么只能修改自己和用户，不能修改其他管理员
+                        if(usernames[0]== userData.Username){//如果选中的是自己
+                            window.location.href = '/admin/edit/' + usernames[0]
+                        }
+                        else if(roles[0]=="user"){//如果选中的是普通用户
+                            window.location.href = '/admin/edit/' + usernames[0]
+                        }
+                        else{
+                            alert("抱歉，普通管理员不能编辑其他管理员的信息")
+                        }
+                    }
+                    
                 }
-            });
-
-            $(function(){
-                $(".action span a").on("click", function(){
-                    window.parent.document.getElementsByTagName("iframe")[0].src = $(this).attr("data-src")
-                });
-            });
+            } else {//如果没有选中
+                alert("请选择要编辑的对象");
+            }
+        });
 
 
-            $(document).ready(function(){
-              $('input').iCheck({
+        $(document).ready(function () {
+            $('input').iCheck({
                 checkboxClass: 'icheckbox_square',
                 radioClass: 'iradio_square',
                 increaseArea: '20%' // optional
-              });
             });
+        });
 
 
-            $('.select-all').on('ifChanged', function(event){
-                if (this.checked) {
-                    $('.select-one').iCheck('check');
-                } else {
+        $('.select-all').on('ifChanged', function (event) {
+            if (this.checked) {
+                $('.select-one').iCheck('check');
+            } else {
+                //如果
+                if ($('.select-one').filter(':checked').length == $('.select-one').length) {//如果是全部都选择了
                     $('.select-one').iCheck('uncheck');
                 }
-            });
 
-            $('.select-one').on('ifChanged', function(event){
-                if (this.checked) {
-                    $(this).closest('tr').css('background-color','#ffffd5');
-                    if ($('.select-one').filter(':checked').length == $('.select-one').length) {
-                        $('.select-all').iCheck('check');
+            }
+        });
+
+        $('.select-one').on('ifChanged', function (event) {
+            if (this.checked) {//如果是选择这个按钮
+                if ($('.select-one').filter(':checked').length == $('.select-one').length) {//如果是全部都选择了
+                    $('.select-all').iCheck('check');
+                }
+            }
+            else {//如果是取消这个按钮
+                $('.select-all').iCheck('uncheck');
+            }
+        });
+
+        $('#mydelete').click(function () {
+            let usernames = [];
+            let roles = [];
+            $('.select-one:checked').each(function () {
+                usernames.push($(this).data('username').toString());
+                roles.push($(this).data('role').toString());
+            });
+            if (usernames.length > 0) {
+                if (usernames.indexOf('liki') < 0) { // 不含超管liki
+                    if (usernames.indexOf(userData.Username) < 0) {//不含自己
+                        if(userData.Username != "liki"&&roles.indexOf("admin")>=0){//如果当前用户是普通管理员，并且选中的里面含有其他管理员（是否为自己已经在其他条件中判断，只需判断是否为管理员即可）
+                            alert("抱歉，普通管理员不能删除其他管理员")
+                        }
+                        else{
+                            $.ajax({
+                                type: "POST",
+                                url: '/admin/deleteuser',
+                                contentType: 'application/json',
+                                data: JSON.stringify(usernames),
+                                dataType: 'json',
+                                success: function (data) {
+                                    console.log(data);
+                                    window.location.reload();
+                                },
+                            });
+                            alert("删除成功");
+                        }
                     }
-                }
-                else {
-                    $(this).closest('tr').css('background-color','');
-                    $('.select-all').iCheck('uncheck');
-                }
-            });
-
-            $('#mydelete').click(function() {
-                let usernames = [];
-                $('.select-one:checked').each(function () {
-                    usernames.push($(this).data('username').toString());
-                });
-                if (usernames.length > 0) {
-                    if (usernames.indexOf('liki') < 0) { // TODO 不能删超管 也不能删自己
-                        console.log(usernames);
-                        $.ajax({
-                            type: "POST",
-                            url: '/admin/deleteuser',
-                            contentType: 'application/json',
-                            data: JSON.stringify(usernames),
-                            dataType: 'json',
-                            success: function(data) {
-                                console.log(data);
-                                window.location.reload();
-                            },
-                        });
-                    } else {
-                        alert("请宁想开");
+                    else {//含自己
+                        alert("抱歉，不能删除自己");
                     }
-                    
-                } else {
-                    alert("请宁乖");
-                }
-            });
 
-            
-        </script>
-    </body>
-</html>
-{{ end }}
+                } else {//包含超管
+                    alert("抱歉，不能删除超管");
+                }
+
+            } else {//没有选择
+                alert("请选择您要删除的用户");
+            }
+        });
+
+
+    </script>
+    <script src="/statics/js/core/jquery.scrollbar.min.js"></script>
+    <script src="/statics/js/atlantis.js"></script>
+    <script src="/statics/js/map.js"></script>
+    <script src="/statics/js/time.js"></script>
+    {{ end }}

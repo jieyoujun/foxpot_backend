@@ -1,82 +1,96 @@
 {{ define "login.html" }}
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>{{ .title }} - 猎狐蜜罐</title>
-        <link rel="shortcut icon" href="/statics/images/favicon.ico">
-        <link rel="stylesheet" href="/statics/css/bootstrap.min.css">
-    </head>
-    <style>
-        html,
-        body {
-            width: 100%;
-            height: 100%;
-            overflow-y: hidden;
-            overflow-x: hidden;
-            color: #fff!important;
-        }
 
-        .login-box {
-            position: relative;
-            margin: 8% auto;
-            padding: 8px;
-            border: 2px solid #9c9c9c;
-            border-radius: 8px;
-            background-color: #ffffff;
-        }
-        .login-box .logo, p {
-            width: 100%;
-            height: auto;
-            margin: 0;
-        }
-        .login-box input {
-            margin-top: 8px;
-            width: 100%;
-            border: 1px solid #9c9c9c;
-            border-radius: 2px;
-            font-size: 14px;
-            padding: 10px;
-            border-radius: 4px;
-        }
-    </style>
-    <body background="/statics/images/bg.jpg">
-        <div class="login-box col-md-4">
-            <div>
-                <a href="/"><img class="logo" src="/statics/images/logo.jpg"></a>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ .title }} - 猎狐蜜罐</title>
+    <link rel="icon" href="/statics/images/foxpot.ico" />
+    <link type="text/css" rel="styleSheet" href="/statics/css/main.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <div id="bg">
+        <div id="login_wrap">
+            <div id="login">
+                <!-- 登录注册切换动画 -->
+                <div id="status">
+                    <i style="top: 0">猎狐蜜罐</i>
+                </div>
+                <span>
+                    <form action="/login" method="POST" autocomplete="off">
+                        <p class="form">
+
+                            <input type="text" name="username" id="username" placeholder="用户名">
+
+                        </p>
+                        <p class="form">
+                            <input style="margin-bottom: 0;" type="password" name="password" id="password"
+                                placeholder="密码">
+                        </p>
+                        <p class="form">
+                            <input style="width: 40%; float: left;margin-top: 20px;margin-bottom: 0" name="captcha"
+                                placeholder="验证码">
+                            <a onclick="return reload()"><img style="width: 50%;background: aliceblue;border: 2px solid;border-radius: 10px;" id="image" src="/api/v1/captcha"></a>
+                        </p>
+                        {{ if .message }}
+                        <p class="text-danger">{{ .message }}</p>
+                        {{end}}
+                        <input type="submit" class="btn" value="登录">
+                    </form>
+                    <!-- <a href="#">忘记密码?</a> -->
+                </span>
             </div>
-            <div class="body">
-                <form action="/login" method="POST" autocomplete="off">
-                    <div>
-                        <input type="text" name="username" id="username" placeholder="你的用户名">
-                    </div>
-                    <div>
-                        <input type="password" name="password" id="password" placeholder="密码">
-                    </div>
-                    <div>
-                        <input style="width: 40%; vertical-align:middle;" name="captcha" placeholder="验证码">
-                        <a onclick="return reload()"><img style="height: 40px;" id="image" src="/api/v1/captcha"></a>
-                    </div>
-                    {{ if .message }}
-                    <p class="text-danger" >{{ .message }}</p>
-                    {{end}}
-                    <input style="background-color: #26292b; color:mintcream; font-weight: bolder;" type="submit" value="登录">
-                </form>
+
+            <div id="login_img">
+                <!-- 图片绘制框 -->
+                <span class="circle">
+                </span>
+                <!-- <span class="star">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+                <span class="fly_star">
+                    <span></span>
+                    <span></span>
+                </span> -->
+                <p id="title">foxpot</p>
             </div>
-        </div>
-        <div style="position: absolute; bottom: 8%;" class="col-md-12 text-center">
-            <p><small>猎狐蜜罐 © All Rights Reserved.</small></p>
         </div>
         
-        <script>
-            function reload() {
-                var src  = document.getElementById('image').src;
-                if (src.indexOf('?') >= 0) {
-                    src = src.substr(0, src.indexOf('?'));
-                }
-                document.getElementById('image').src = src + "?reload=" + (new Date()).getTime(); // 重新请求验证码
-                return false; // 页面不刷新
+    </div>
+    <div id="bg1">
+    <div class="footer_text">
+        <p>
+            <small>猎狐蜜罐 © All Rights Reserved.</small>
+        </p>
+    </div>
+</div>
+    <script>
+        function reload() {
+            var src = document.getElementById('image').src;
+            if (src.indexOf('?') >= 0) {
+                src = src.substr(0, src.indexOf('?'));
             }
-        </script>
-    </body>
+            document.getElementById('image').src = src + "?reload=" + (new Date()).getTime(); // 重新请求验证码
+            return false; // 页面不刷新
+        }
+        //自动居中title
+        var name_c = document.getElementById("title")
+        name = name_c.innerHTML.split("")
+        name_c.innerHTML = ""
+        for (i = 0; i < name.length; i++)
+            if (name[i] != ",")
+                name_c.innerHTML += "<i>" + name[i] + "</i>"
+    </script>
+</body>
+
 </html>
 {{ end }}

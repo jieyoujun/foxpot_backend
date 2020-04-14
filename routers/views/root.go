@@ -14,8 +14,7 @@ import (
 // Handle404 无效请求地址
 func Handle404(c *gin.Context) {
 	c.HTML(http.StatusNotFound, "error.html", gin.H{
-		"code":    404,
-		"message": "宁迷路了",
+		"message": "404 Not Found",
 		"title":   "错误",
 	})
 }
@@ -50,9 +49,7 @@ func GetLogin(c *gin.Context) {
 		}
 	}
 	c.HTML(http.StatusOK, "login.html", gin.H{
-		"code":    200,
-		"message": "",
-		"title":   "登录",
+		"title": "登录",
 	})
 }
 
@@ -67,21 +64,19 @@ func GetLogout(c *gin.Context) {
 // PostLogin 登录POST
 func PostLogin(c *gin.Context) {
 	session := sessions.Default(c)
-	captchaCode := c.PostForm("captcha")
-	if captchaID, ok := session.Get("captcha").(string); !ok || !captcha.VerifyString(captchaID, captchaCode) {
-		c.HTML(http.StatusBadRequest, "login.html", gin.H{
-			"code":    400,
-			"message": "验证码错误",
-			"title":   "登录",
-		})
-		return
-	}
 	username := c.PostForm("username")
 	password := c.PostForm("password")
 	if username == "" || password == "" {
 		c.HTML(http.StatusBadRequest, "login.html", gin.H{
-			"code":    400,
-			"message": "用户名和密码不能为空",
+			"message": "用户名/密码不能为空",
+			"title":   "登录",
+		})
+		return
+	}
+	captchaCode := c.PostForm("captcha")
+	if captchaID, ok := session.Get("captcha").(string); !ok || !captcha.VerifyString(captchaID, captchaCode) {
+		c.HTML(http.StatusBadRequest, "login.html", gin.H{
+			"message": "验证码错误",
 			"title":   "登录",
 		})
 		return
@@ -89,8 +84,7 @@ func PostLogin(c *gin.Context) {
 	user, err := models.GetUserByUsername(username)
 	if err != nil || !utils.ValidatePassword(user.HashedPassword, password) {
 		c.HTML(http.StatusBadRequest, "login.html", gin.H{
-			"code":    400,
-			"message": "用户名或密码不正确",
+			"message": "用户名/密码不正确",
 			"title":   "登录",
 		})
 		return
