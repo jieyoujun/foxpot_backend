@@ -1,6 +1,7 @@
 package views
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-contrib/sessions"
@@ -65,8 +66,12 @@ func PostAdminUpdateProfile(c *gin.Context) {
 		password, _ = utils.HashPassword(password)
 		user.HashedPassword = password
 	}
-	user.Email = email
-	user.Phone = phone
+	if email != "" {
+		user.Email = email
+	}
+	if phone != "" {
+		user.Phone = phone
+	}
 	err := models.UpdateUser(user)
 	if err != nil {
 		c.HTML(http.StatusOK, "admin/updateprofile", gin.H{
@@ -74,13 +79,13 @@ func PostAdminUpdateProfile(c *gin.Context) {
 			"title":   "修改个人资料",
 			"user":    user,
 		})
-	} else {
-		c.HTML(http.StatusOK, "admin/updateprofile", gin.H{
-			"message": "更新成功",
-			"title":   "修改个人资料",
-			"user":    user,
-		})
+		return
 	}
+	c.HTML(http.StatusOK, "admin/updateprofile", gin.H{
+		"message": "更新成功",
+		"title":   "修改个人资料",
+		"user":    user,
+	})
 }
 
 // GetAdminUserManage 用户管理
@@ -154,6 +159,7 @@ func PostAdminCreateUser(c *gin.Context) {
 		return
 	}
 	password, _ = utils.HashPassword(password)
+	fmt.Println(username, role)
 	err := models.CreateUser(&models.User{
 		Username:       username,
 		HashedPassword: password,
@@ -248,7 +254,7 @@ func PostAdminUpdateUser(c *gin.Context) {
 	if password != confirmPassword {
 		c.HTML(http.StatusBadRequest, "admin/updateuser", gin.H{
 			"message":  "密码不一致",
-			"title":    "新建用户",
+			"title":    "编辑用户信息",
 			"user":     user,
 			"editUser": editUser,
 		})
@@ -262,15 +268,19 @@ func PostAdminUpdateUser(c *gin.Context) {
 			"user":     user,
 			"editUser": editUser,
 		})
+		return
 	}
-	editUser.Username = username
 	if password != "" {
 		password, _ = utils.HashPassword(password)
 		editUser.HashedPassword = password
 	}
 	editUser.Role = role
-	editUser.Email = email
-	editUser.Phone = phone
+	if email != "" {
+		editUser.Email = email
+	}
+	if phone != "" {
+		editUser.Phone = phone
+	}
 	err := models.UpdateUser(editUser)
 	if err != nil {
 		c.HTML(http.StatusOK, "admin/updateuser", gin.H{
@@ -279,14 +289,14 @@ func PostAdminUpdateUser(c *gin.Context) {
 			"user":     user,
 			"editUser": editUser,
 		})
-	} else {
-		c.HTML(http.StatusOK, "admin/updateuser", gin.H{
-			"message":  "更新成功",
-			"title":    "编辑用户信息",
-			"user":     user,
-			"editUser": editUser,
-		})
+		return
 	}
+	c.HTML(http.StatusOK, "admin/updateuser", gin.H{
+		"message":  "更新成功",
+		"title":    "编辑用户信息",
+		"user":     user,
+		"editUser": editUser,
+	})
 }
 
 // 第三方组件
@@ -318,7 +328,7 @@ func GetAdminKibanaDashboard(c *gin.Context) {
 	session := sessions.Default(c)
 	userID, _ := session.Get(utils.Config.Session.Key).(uint)
 	user, _ := models.GetUserByID(userID)
-	c.HTML(http.StatusOK, "admin/dashborad.html", gin.H{
+	c.HTML(http.StatusOK, "admin/dashboard", gin.H{
 		"title": "仪表板",
 		"user":  user,
 	})
@@ -331,7 +341,7 @@ func GetAdminCockpitDocker(c *gin.Context) {
 	user, _ := models.GetUserByID(userID)
 	c.HTML(http.StatusOK, "admin/docker", gin.H{
 		"title": "系统状态",
-		"User":  user,
+		"user":  user,
 	})
 }
 
@@ -342,7 +352,7 @@ func GetAdminCockpitSystem(c *gin.Context) {
 	user, _ := models.GetUserByID(userID)
 	c.HTML(http.StatusOK, "admin/system", gin.H{
 		"title": "系统状态",
-		"User":  user,
+		"user":  user,
 	})
 }
 
@@ -353,6 +363,6 @@ func GetAdminCockpitTerminal(c *gin.Context) {
 	user, _ := models.GetUserByID(userID)
 	c.HTML(http.StatusOK, "admin/terminal", gin.H{
 		"title": "Web终端",
-		"User":  user,
+		"user":  user,
 	})
 }

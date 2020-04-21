@@ -15,52 +15,54 @@
         <div class="page-inner mt--5 ">
             <div class="card mt--2">
                 <div class="card-body">
-                    <form action="" method="POST" autocomplete="off">
+                    <form action="/admin/updateuser" method="POST" autocomplete="off">
+                        {{ with .editUser }}
                         <div class="row mt-5">
                             <div class="offset-md-1 col-md-5">
                                 <div class="form-group center-block">
                                     <label class="font-black">用户名</label>
-                                    <input type="text" class="form-control" id="username" name="username"
-                                        placeholder="用户名" disabled="disabled">
+                                    <input type="text" class="form-control" name="username" value="{{ .Username }}"
+                                    placeholder="用户名" readonly>
                                 </div>
                                 <div class="form-group">
                                     <label for="password" class="font-black">密码</label>
-                                    <input type="password" class="form-control" id="password" name="password"
-                                        placeholder="密码" required>
+                                    <input type="password" class="form-control" name="password" value=""
+                                        placeholder="密码">
                                 </div>
                                 <div class="form-group">
                                     <label for="password" class="font-black">确认密码</label>
-                                    <input type="password" class="form-control" id="confirm" name="confirm"
-                                        placeholder="确认密码" required> 
+                                    <input type="password" class="form-control" name="confirm" value=""
+                                        placeholder="确认密码"> 
                                 </div>
                                 <div class="form-group">
                                     <label for="role" class="font-black">使用权限</label>
-                                    <input type="password" class="form-control" id="role" name="role" placeholder="用户"
-                                        disabled="disabled">
+                                    <input type="" class="form-control" name="role" placeholder="普通用户" value="{{ .Role | role2Str }}"
+                                        readonly>
                                 </div>
                             </div>
                             <div class="col-md-5">
                                 <div class="form-group">
                                     <label for="email" class="font-black">邮箱</label>
-                                    <input type="email" class="form-control" id="email" name="email"
+                                    <input type="email" class="form-control" name="email" value="{{ .Email }}"
                                         placeholder="xxx@xxx.com">
                                 </div>
                                 <div class="form-group">
                                     <label for="text" class="font-black">手机号</label>
-                                    <input type="text" class="form-control" id="phone" name="phone" placeholder="手机号">
+                                    <input type="text" class="form-control" name="phone" value="{{ .Phone }}" placeholder="手机号">
                                 </div>
                                 <div class="form-group">
                                     <label for="email" class="font-black">创建时间</label>
-                                    <input type="email" class="form-control" id="CreatedAt" name="CreatedAt"
-                                        placeholder="xxx@xxx.com" disabled="disabled">
+                                    <input type="email" class="form-control"  name="CreatedAt" value="{{ .CreatedAt}}"
+                                        placeholder="" readonly>
                                 </div>
                                 <div class="form-group">
                                     <label for="text" class="font-black">最近登录时间</label>
-                                    <input type="text" class="form-control" id="LastLoginAt" name="LastLoginAt"
-                                        placeholder="手机号" disabled="disabled">
+                                    <input type="text" class="form-control" name="LastLoginAt" value="{{ .LastLoginAt }}"
+                                        placeholder="" readonly>
                                 </div>
                             </div>
                         </div>
+                        {{ end }}
                         <div class="row mt-2">
                             <div class="offset-md-9 card-action">
                                 <button class="btn btn-sm btn-default " type="submit"><i
@@ -79,7 +81,7 @@
             </div>
         </div>
     </div>
-    {{ with .editUser }}
+    <!-- {{ with .editUser }}
     <div style="display:none;" id="getUsername">{{ .Username }}</div>
     <div style="display:none;" id="getRole">{{ .Role | role2Str }}</div>
     <div style="display:none;" id="getEmail">{{ .Email }}</div>
@@ -94,10 +96,11 @@
         $("#phone").attr("placeholder", document.getElementById("getPhone").innerHTML);
         $("#CreatedAt").attr("placeholder", document.getElementById("getCreatedAt").innerHTML);
         $("#LastLoginAt").attr("placeholder", document.getElementById("getLastLoginAt").innerHTML);
-    </script>
+    </script> -->
     {{ if .message }}
     <div style="display:none;" id="getmessage">{{ .message }}</div>
     <script>alert(document.getElementById("getmessage").innerHTML)</script>
     {{end}}
-    {{ template "footer" }}
-    {{ end }}
+</div>
+{{ template "footer" }}
+{{ end }}

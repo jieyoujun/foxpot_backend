@@ -43,7 +43,7 @@ func InitDB() (err error) {
 		return err
 	}
 
-	// DB
+	// Sqlite
 	DB, err = gorm.Open(utils.Config.DB.Type, utils.Config.DB.DSN)
 	if err != nil {
 		return err

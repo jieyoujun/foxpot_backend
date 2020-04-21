@@ -24,7 +24,7 @@ func Init() {
 		},
 		"timeBeautifier": func(timeString string) string {
 			if timeString == "0001/01/01 00:00:00" {
-				return ""
+				return "从未登录过"
 			} else {
 				return timeString
 			}
@@ -73,7 +73,7 @@ func Init() {
 		admin.GET("/createuser", views.GetAdminCreateUser)
 		admin.POST("/createuser", views.PostAdminCreateUser)
 		admin.POST("/deleteuser", views.PostAdminDeleteUser)
-		admin.GET("/updateuser", views.GetAdminUpdateUser)
+		admin.GET("/updateuser/:username", views.GetAdminUpdateUser)
 		admin.POST("/updateuser", views.PostAdminUpdateUser)
 		// 组件
 		admin.GET("/eshead", views.GetAdminESHead)

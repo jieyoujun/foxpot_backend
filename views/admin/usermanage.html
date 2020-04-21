@@ -92,15 +92,6 @@
         </div>
     </div>
     <script>
-        var userData = null;//获取当前用户
-        $.ajax({
-            type: "Get",
-            url: "/admin/userData",
-            async: false,
-            success: function (response) {
-                userData = response.User;
-            }
-        })
         // TODO 可以把 delete和update函数精简合并下 都有收集checked的username部分
         $('#myupdate').click(function () {
             let usernames = [];
@@ -113,21 +104,7 @@
                 if(usernames.length > 1){//如果选中了多个
                     alert("您只能选择一个对象进行编辑");
                 }else{//如果选中了一个
-                    if(userData.Username=="liki"){//如果是超管进行操作，那么都可以进行修改
-                        window.location.href = '/admin/edit/' + usernames[0]
-                    }
-                    else{//如果不是超管，那么只能修改自己和用户，不能修改其他管理员
-                        if(usernames[0]== userData.Username){//如果选中的是自己
-                            window.location.href = '/admin/edit/' + usernames[0]
-                        }
-                        else if(roles[0]=="user"){//如果选中的是普通用户
-                            window.location.href = '/admin/edit/' + usernames[0]
-                        }
-                        else{
-                            alert("抱歉，普通管理员不能编辑其他管理员的信息")
-                        }
-                    }
-                    
+                    window.location.href = '/admin/updateuser/' + usernames[0]
                 }
             } else {//如果没有选中
                 alert("请选择要编辑的对象");
@@ -168,6 +145,7 @@
         });
 
         $('#mydelete').click(function () {
+            console.log(document.getElementsByClassName("u-text").item("h4"))
             let usernames = [];
             let roles = [];
             $('.select-one:checked').each(function () {
@@ -175,32 +153,22 @@
                 roles.push($(this).data('role').toString());
             });
             if (usernames.length > 0) {
-                if (usernames.indexOf('liki') < 0) { // 不含超管liki
-                    if (usernames.indexOf(userData.Username) < 0) {//不含自己
-                        if(userData.Username != "liki"&&roles.indexOf("admin")>=0){//如果当前用户是普通管理员，并且选中的里面含有其他管理员（是否为自己已经在其他条件中判断，只需判断是否为管理员即可）
-                            alert("抱歉，普通管理员不能删除其他管理员")
-                        }
-                        else{
-                            $.ajax({
-                                type: "POST",
-                                url: '/admin/deleteuser',
-                                contentType: 'application/json',
-                                data: JSON.stringify(usernames),
-                                dataType: 'json',
-                                success: function (data) {
-                                    console.log(data);
-                                    window.location.reload();
-                                },
-                            });
-                            alert("删除成功");
-                        }
-                    }
-                    else {//含自己
-                        alert("抱歉，不能删除自己");
-                    }
+                if (usernames.indexOf(document.getElementsByClassName("u-text")[0].children[0].innerText) < 0) { // 不含超管liki
+                    $.ajax({
+                        type: "POST",
+                        url: '/admin/deleteuser',
+                        contentType: 'application/json',
+                        data: JSON.stringify(usernames),
+                        dataType: 'json',
+                        success: function (data) {
+                            console.log(data);
+                            window.location.reload();
+                        },
+                    });
+                    alert("删除成功");
 
                 } else {//包含超管
-                    alert("抱歉，不能删除超管");
+                    alert("抱歉，不能删除自己");
                 }
 
             } else {//没有选择

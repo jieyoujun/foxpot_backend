@@ -92,7 +92,7 @@ func GetUserKibanaDiscover(c *gin.Context) {
 	session := sessions.Default(c)
 	userID, _ := session.Get(utils.Config.Session.Key).(uint)
 	user, _ := models.GetUserByID(userID)
-	c.HTML(http.StatusOK, "admin/discover", gin.H{
+	c.HTML(http.StatusOK, "user/discover", gin.H{
 		"title": "告警详情",
 		"user":  user,
 	})
@@ -103,7 +103,7 @@ func GetUserKibanaDashboard(c *gin.Context) {
 	session := sessions.Default(c)
 	userID, _ := session.Get(utils.Config.Session.Key).(uint)
 	user, _ := models.GetUserByID(userID)
-	c.HTML(http.StatusOK, "admin/dashborad.html", gin.H{
+	c.HTML(http.StatusOK, "user/dashboard", gin.H{
 		"title": "仪表板",
 		"user":  user,
 	})
@@ -114,8 +114,8 @@ func GetUserCockpitSystem(c *gin.Context) {
 	session := sessions.Default(c)
 	userID, _ := session.Get(utils.Config.Session.Key).(uint)
 	user, _ := models.GetUserByID(userID)
-	c.HTML(http.StatusOK, "admin/system", gin.H{
+	c.HTML(http.StatusOK, "user/system", gin.H{
 		"title": "系统状态",
-		"User":  user,
+		"user":  user,
 	})
 }

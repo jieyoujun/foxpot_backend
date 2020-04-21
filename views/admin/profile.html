@@ -30,18 +30,18 @@
                             <div class="form-group center-block">
                                 <label class="font-black">用户名</label>
                                 <input type="text" class="form-control" placeholder="{{ .Username }}"
-                                    disabled="disabled">
+                                    readonly>
                             </div>
                             <div class="form-group">
                                 <label for="role" class="font-black">使用权限</label>
-                                <input type="text" class="form-control" placeholder="{{ .Role | role2Str }}" disabled="disabled">
+                                <input type="text" class="form-control" placeholder="{{ .Role | role2Str }}" readonly>
                             </div>
                             <div class="form-group">
                                 <label for="email" class="font-black">邮箱</label>
                                 {{ if .Email }}
-                                <input type="text" class="form-control" placeholder="{{ .Email }}" disabled="disabled">
+                                <input type="text" class="form-control" placeholder="{{ .Email }}" readonly>
                                 {{ else }}
-                                <input type="text" class="form-control" placeholder="本用户很懒，并没有设置邮箱" disabled="disabled">
+                                <input type="text" class="form-control" placeholder="本用户很懒，并没有设置邮箱" readonly>
                                 {{ end }}
                             </div>
                         </div>
@@ -49,20 +49,20 @@
                             <div class="form-group">
                                 <label for="text" class="font-black">手机号</label>
                                 {{ if .Phone }}
-                                <input type="text" class="form-control" placeholder="{{ .Phone }}" disabled="disabled">
+                                <input type="text" class="form-control" placeholder="{{ .Phone }}" readonly>
                                 {{ else }}
                                 <input type="text" class="form-control" placeholder="本用户很懒，并没有设置手机号"
-                                    disabled="disabled">
+                                    readonly>
                                 {{ end }}
                             </div>
                             <div class="form-group">
                                 <label class="font-black">创建时间</label>
-                                <input type="text" class="form-control" id="id" placeholder="{{ .CreatedAt }}" disabled="disabled">
+                                <input type="text" class="form-control" id="id" placeholder="{{ .CreatedAt }}" readonly>
                             </div>
                             <div class="form-group">
                                 <label class="font-black">最近登录时间</label>
                                 <input type="text" class="form-control" placeholder="{{ .LastLoginAt }}"
-                                    disabled="disabled">
+                                    readonly>
                             </div>
                         </div>
                     </div>
